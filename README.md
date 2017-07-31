@@ -1,0 +1,2 @@
+# mapbot
+make life easier
