@@ -1,0 +1,22 @@
+<style>
+    .txt {
+        margin-top: 50px;
+    }
+    button {
+        margin: 2px;
+    }
+</style>
+<div>
+    {{#show}}
+    <button type="button" name="button">{{id}} {{chinese}}</button>
+
+    {{/show}}
+</div>
+
+
+
+<form class="txt" action="/getRelation" method="post">
+    <div>
+        <input class="sub" type="submit" value="Submit">
+    </div>
+</form>
