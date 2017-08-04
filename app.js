@@ -17,7 +17,7 @@ app.set('view engine', 'handlebars');
 //setupPassport(app);
 app.use('/', router);
 
-
+app.get('/home',)
 
 
 app.listen(port);
