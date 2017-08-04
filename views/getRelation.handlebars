@@ -1,0 +1,26 @@
+<div>
+    {{#showing}}
+    <ul>
+        <li>line_station:{{id}}</li>
+        <li>lineId:{{lineId}}</li>
+        <li>stationId:{{stationId}}</li>
+        <li>sequel:{{sequel}}</li>
+    </ul>
+
+    {{#line}}
+    <ul>
+        <li>line:{{id}}</li>
+        <li>{{chinese}}</li>
+        <li>{{english}}</li>
+    </ul>
+    {{/line}}
+
+    {{#station}}
+    <ul>
+        <li>station:{{id}}</li>
+        <li>{{chinese}}</li>
+        <li>{{english}}</li>
+    </ul>
+    {{/station}}
+    {{/showing}}
+</div>
