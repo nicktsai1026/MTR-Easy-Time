@@ -68,74 +68,102 @@ bot.on(['location', 'contact'], (msg, self) => {
     return bot.sendMessage(msg.from.id, `Thank you for ${self.type}.`);
 });
 
-// Inline buttons
-bot.on('/inlineKeyboard', msg => {
-    var linesChi = [];
-    var linesEng = [];
+bot.on(/^\/from (.+)$/, (msg, props) => {
+    const text = props.match[1];
+    var allLines = {}
+    var buttons = [];
     Line.findAll()
         .then((lines) => {
             lines.forEach((val) => {
-                linesChi.push(val.dataValues.chinese);
-                linesEng.push(val.dataValues.english);
+                var abr = val.dataValues.id
+                allLines[abr] = []
+                allLines[abr].push(val.dataValues.chinese);
+                allLines[abr].push(val.dataValues.english);
+
             });
-            console.log(linesChi)
-            console.log(linesEng)
+        }).then(() => {
+            for (var abr in allLines) {
+                var button = [bot.inlineButton('' + allLines[abr][1], { callback: abr})]
+                buttons.push(button)
+            }
+            console.log(buttons)
+            let replyMarkup = bot.inlineKeyboard(buttons)
+            return bot.sendMessage(msg.from.id, 'And you are going to?', { replyMarkup });
         })
-
-    var buttons = []
-    linesChi.forEach(function (val) {
-        var button = [bot.inlineButton(val, { callback: 'KTL'})]
-        buttons.push()
-    })
-
-    let replyMarkup = bot.inlineKeyboard([
-        [bot.inlineButton('Kwun Tong Line', { callback: 'KTL' })],
-        [bot.inlineButton('Island Line', { callback: 'ISL' })],
-        [bot.inlineButton('Tuen Wan Line', { callback: 'TWL' })]
-    ]);
-    return bot.sendMessage(msg.from.id, 'Onboard from?', { replyMarkup });
 });
 
-bot.on(/^\/from (.+)$/, (msg, props) => {
-    bot.sendMessage(msg.from.id, 'Ok! ', { replyMarkup: 'hide' });
-    const text = props.match[1];
-    let replyMarkup = bot.inlineKeyboard([
-        [bot.inlineButton('Kwun Tong Line', { callback: 'KTL' })],
-        [bot.inlineButton('Island Line', { callback: 'ISL' })],
-        [bot.inlineButton('Tuen Wan Line', { callback: 'TWL' })]
-    ]);
-    // return bot.sendMessage(msg.from.id, text, { replyToMessage: msg.message_id });
-    return bot.sendMessage(msg.from.id, 'And where are you going?', { replyMarkup });
+// Inline buttons
+bot.on('/inlineKeyboard', msg => {
+    var allLines = {}
+    var buttons = [];
+    Line.findAll()
+        .then((lines) => {
+            lines.forEach((val) => {
+                var abr = val.dataValues.id
+                allLines[abr] = []
+                allLines[abr].push(val.dataValues.chinese);
+                allLines[abr].push(val.dataValues.english);
+
+            });
+        }).then(() => {
+            for (var abr in allLines) {
+                var button = [bot.inlineButton('' + allLines[abr][1], { callback: abr })]
+                console.log(button)
+                buttons.push(button)
+            }
+            console.log(buttons)
+            let replyMarkup = bot.inlineKeyboard(buttons)
+            return bot.sendMessage(msg.from.id, 'Onboard from?', { replyMarkup });
+        })
 });
 
 // Inline button callback
 bot.on('callbackQuery', msg => {
     // User message alert
-    if (msg.data == 'KTL') {
-        var arr = ['調景嶺', '油塘', '藍田', '觀塘', '牛頭角', '九龍灣', '彩虹', '鑽石山', '黃大仙', '樂富', '九龍塘', '石硤尾', '太子', '旺角', '油麻地', '何文田', '黃埔']
-        var keys = []
-        for (var i = 0; i < arr.length; i++) {
-            keys.push(['/from ' + arr[i]])
+    console.log(msg.data)
+    Line_station.findAll({
+        where: {
+            lineId: msg.data
+        },
+        include: [{
+            model: Station,
+            required: true
+        }],
+    }).then((stations) => {
+        console.log('This is before promise')
+        var allArr = [];
+        var getStations = [];
+        function compare(a, b) {
+            if (a.dataValues.sequel < b.dataValues.sequel)
+                return -1;
+            if (a.dataValues.sequel > b.dataValues.sequel)
+                return 1;
+            return 0;
         }
-        var replyMarkup = bot.keyboard(keys)
+        stations.sort(compare);
+        stations.forEach((val) => {
+            console.log(val.dataValues.sequel)
+            getStations.push(Station.findOne({ where: { id: val.dataValues.stationId } })
+                .then((station) => {
+                    allArr.push(station.english);
+                    return allArr
+                }))
+        });
+        Promise.all(getStations).then((allArr) => {
+            var stations = allArr.pop();
+            var keys = []
+            for (var i = 0; i < stations.length; i++) {
+                keys.push(['/from ' + stations[i]])
+            }
+            var replyMarkup = bot.keyboard(keys)
 
-        bot.sendMessage(msg.from.id, 'First callback', { replyMarkup });
-        return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
-
-    } else if (msg.data == 'ISL') {
-        var arr = ['堅尼地城', '香港大學', '西營盤', '上環', '中環', '金鐘', '灣仔', '銅鑼灣', '天后', '炮台山', '北角', '鰂魚涌', '太古', '西灣河', '筲箕灣', '杏花邨', '柴灣']
-        var keys = []
-        for (var i = 0; i < arr.length; i++) {
-            keys.push(['/from ' + arr[i]])
-        }
-        var replyMarkup = bot.keyboard(keys)
-
-        bot.sendMessage(msg.from.id, 'First callback', { replyMarkup });
-        return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
-
-    } else if (msg.data == 'TWA') {
-        return bot.sendMessage(msg.from.id, 'Tuen Wan it is!');
-    };
+            bot.sendMessage(msg.from.id, 'First callback', { replyMarkup });
+            return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
+        })
+            .catch((err) => {
+                console.log(err);
+            })
+    })
 });
 
 // Inline query
