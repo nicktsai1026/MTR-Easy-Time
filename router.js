@@ -1,4 +1,4 @@
-const passport = require('passport-facebook');
+const passport = require('passport');
 const models = require('./models');
 const Line = models.line;
 const Station = models.station;

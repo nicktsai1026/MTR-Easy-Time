@@ -10,6 +10,9 @@ const setupPassport = require('./passport');
 const router = require('./router')(express);
 const port = process.env.PORT || 8080;
 
+app.use(session({
+    secret: 'supersecret'
+}));
 app.use(bodyParser.urlencoded({extended:true }));
 app.engine('handlebars', hb({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
