@@ -20,6 +20,8 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.5",
+    "oauth-sign": "^0.8.2",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "pg": "^6.3.0",

@@ -175,5 +175,16 @@ module.exports = (express) => {
         res.render('doneSetupDB');
     });
 
+    router.get('/auth/facebook',
+      passport.authenticate('facebook'));
+
+    router.get('/auth/facebook/callback',
+      passport.authenticate('facebook', { failureRedirect: '/addmtrId' }),
+      function(req, res) {
+          console.log('hello');
+        // Successful authentication, redirect home.
+        res.redirect('/');
+      });
+
     return router;
 };

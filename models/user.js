@@ -1,8 +1,8 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var user = sequelize.define('user', {
-    telegramId: DataTypes.INTEGER,
-    facebookId: DataTypes.INTEGER,
+    telegramId: DataTypes.STRING,
+    facebookId: DataTypes.STRING,
     email: DataTypes.STRING
   }, {
     classMethods: {

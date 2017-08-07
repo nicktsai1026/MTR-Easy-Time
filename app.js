@@ -2,13 +2,14 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const hb = require('express-handlebars');
+const session = require('express-session');
 const models = require('./models');
 const Line = models.line;
 const Station = models.station;
 const Line_station = models.line_station;
 const setupPassport = require('./passport');
 const router = require('./router')(express);
-const port = process.env.PORT || 8080;
+//const port = process.env.PORT || 8080;
 
 app.use(session({
     secret: 'supersecret'
@@ -43,4 +44,4 @@ app.get('/corah', function(req,res){
 })
 // app.post('/'
 
-app.listen(port);
+app.listen(8080);
