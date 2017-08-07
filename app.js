@@ -17,7 +17,27 @@ app.set('view engine', 'handlebars');
 //setupPassport(app);
 app.use('/', router);
 
-app.get('/home',)
+app.get('/stylesheet.css', function(req, res){
+    res.sendFile(__dirname + '/stylesheet.css');
+})
 
+app.get('/corah', function(req,res){
+    Line.findAll()
+        .then((lines) => {
+            var arrLine = [];
+            var objLine = {};
+            //console.log(stations);
+            lines.forEach((val)=>{
+                //console.log(val.dataValues);
+                arrLine.push(val.dataValues);
+            });
+            objLine.show = arrLine;
+            res.render('display',objLine);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+})
+// app.post('/'
 
 app.listen(port);
