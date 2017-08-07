@@ -1,0 +1,61 @@
+<html>
+<head>
+
+    <link rel="stylesheet" href="stylesheet.css"></link>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        var lineArr = [[1,2,3],[4,5,6]];
+    	$(document).ready(function(){
+            $("button").click(function(){
+                // delete previous input
+                $('#station').empty();
+                //get id of selected line
+                var id = $(this).attr('id');
+                console.log(id);
+                // get stations of line according to id
+
+                .forEach(function(station){
+                    // append stations of line to stations div, with its id(??)
+                    $('#station').append("<button id=\"" + station.id + "\">" + station + "</button>")
+                })
+            })
+        })
+	</script>
+
+</head>
+<body>
+    <div class="lines">
+        <h1>Lines</h1>
+        <button id="1" type="button" onclick="">觀塘綫</button>
+        <button id="2" type="button" onclick="">荃灣綫</button>
+        <button id="3" type="button" onclick="">港島綫</button>
+        <button id="4" type="button" onclick="">南港島綫</button>
+        <button id="5" type="button" onclick="">將軍澳綫</button>
+        <button id="6" type="button" onclick="">東涌綫</button>
+        <button id="7" type="button" onclick="">機場快綫</button>
+        <button id="8" type="button" onclick="">東鐵綫</button>
+        <button id="9" type="button" onclick="">馬鞍山綫</button>
+        <button id="10" type="button" onclick="">西鐵綫</button>
+    </div>
+    <div class="stations">
+        <h1>Stations</h1>
+        <button type="button" onclick="">調景嶺</button>
+        <button type="button" onclick="">油塘</button>
+        <button type="button" onclick="">藍田</button>
+        <button type="button" onclick="">觀塘</button>
+        <button type="button" onclick="">牛頭角</button>
+        <button type="button" onclick="">九龍灣</button>
+        <button type="button" onclick="">彩虹</button>
+        <button type="button" onclick="">鑽石山</button>
+        <button type="button" onclick="">黃大仙</button>
+        <button type="button" onclick="">樂富</button>
+        <button type="button" onclick="">九龍塘</button>
+        <button type="button" onclick="">石硤尾</button>
+        <button type="button" onclick="">太子</button>
+        <button type="button" onclick="">旺角</button>
+        <button type="button" onclick="">油麻地</button>
+        <button type="button" onclick="">何文田</button>
+        <button type="button" onclick="">黃埔</button>
+    </div>
+</body>
+</html>
