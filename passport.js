@@ -42,4 +42,5 @@ module.exports = (app) => {
             done(null, user);
         });
     });
+
 };

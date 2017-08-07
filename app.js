@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const hb = require('express-handlebars');
 const session = require('express-session');
 const models = require('./models');
