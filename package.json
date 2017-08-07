@@ -22,6 +22,7 @@
     "express-handlebars": "^3.0.0",
     "pg": "^6.3.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.4.2"
+    "sequelize": "^4.4.2",
+    "telebot": "^1.2.3"
   }
 }
