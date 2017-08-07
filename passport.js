@@ -8,4 +8,4 @@ const facebookStrategy = require('passport-facebook').Strategy;
 module.exports = (app) => {
     // app.use(passport.initialize());
     // app.use(passport.session());
-    
+}
