@@ -1,5 +1,4 @@
 const passport = require('passport-facebook');
-
 const models = require('./models');
 const Line = models.line;
 const Station = models.station;
@@ -18,6 +17,27 @@ const stationObj = {
      '9' : ['大圍','車公廟','沙田圍','第一城','石門','大水坑','恒安','馬鞍山','烏溪沙'],
      '10' : ['紅磡','尖東','柯士甸','南昌','美孚','荃灣西','錦上路','元朗','朗屏','天水圍','兆康','屯門']
 };
+const mtrInfo = {"Kennedy Town": ["83","KET"],"HKU": ["82","HKU"],"Sai Ying Pun": ["81","SYP"],"Sheung Wan": ["26","SHW"],
+                "Central": ["1","CEN"],"Admiralty": ["2","ADM"],"Wan Chai": ["27","WAC"],"Causeway Bay": ["28","CAB"],
+                "Tin Hau": ["29","TIH"],"Fortress Hill": ["30","FOH"],"North Point": ["31","NOP"],"Quarry Bay": ["32","QUB"],
+                "Tai Koo": ["33","TAK"],"Sai Wan Ho": ["34","SWH"],"Shau Kei Wan": ["35","SKW"],"Heng Fa Chuen": ["36","HFC"],
+                "Chai Wan": ["37","CHW"],"Ocean Park": ["86","OCP"],"Wong Chuk Hang": ["87","WCH"],
+                "Lei Tung": ["88","LET"],"South Horizons": ["89","SOH"],"Whampoa": ["85","WHA"],"Ho Man Tin": ["84","HOM"],"Yau Ma Tei": ["5","YMT"],
+                "Mong Kok": ["6","MOK"],"Prince Edward": ["16","PRE"],"Shek Kip Mei": ["7","SKM"],"Kowloon Tong": ["8","KOT"],"Lok Fu": ["9","LOF"],
+                "Wong Tai Sin": ["10","WTS"],"Diamond Hill": ["11","DIH"],"Choi Hung": ["12","CHH"],"Kowloon Bay": ["13","KOB"],"Ngau Tau Kok": ["14","NTK"],
+                "Kwun Tong": ["15","KWT"],"Lam Tin": ["38","LAT"],"Yau Tong": ["48","YAT"],"Tiu Keng Leng": ["49","TIK"],"Tsim Sha Tsui": ["3","TST"],
+                "Jordan": ["4","JOR"],"Sham Shui Po": ["17","SSP"],"Cheung Sha Wan": ["18","CSW"],"Lai Chi Kok": ["19","LCK"],"Mei Foo": ["20","MEF"],
+                "Lai King": ["21","LAK"],"Kwai Fong": ["22","KWF"],"Kwai Hing": ["23","KWH"],"Tai Wo Hau": ["24","TWH"],"Tsuen Wan": ["25","TSW"],
+                "Tseung Kwan O": ["50","TKO"],"Hang Hau": ["51","HAH"],"Po Lam": ["52","POA"],"LOHAS Park": ["57","LHP"],"Hong Kong": ["39","HOK"],
+                "Kowloon": ["40","KOW"],"Olympic": ["41","OLY"],"Nam Cheong": ["53","NAC"],"Tsing Yi": ["42","TSY"],"Tung Chung": ["43","TUC"],
+                "Sunny Bay": ["54","SUN"],"Disneyland Resort": ["55","DIS"],"Hung Hom": ["64","HUH"],"Mong Kok East": ["65","MKK"],"Tai Wai": ["67","TAW"],
+                "Sha Tin": ["68","SHT"],"Fo Tan": ["69","FOT"],"Racecourse": ["70","RAC"],"University": ["71","UNI"],"Tai Po Market": ["72","TAP"],
+                "Tai Wo": ["73","TWO"],"Fanling": ["74","FAN"],"Sheung Shui": ["75","SHS"],"Lok Ma Chau": ["78","LMC"],"Lo Wu": ["76","LOW"],
+                "Che Kung Temple": ["96","CKT"],"Sha Tin Wai": ["97","STW"],"City One": ["98","CIO"],"Shek Mun": ["99","SHM"],"Tai Shui Hang": ["100","TSH"],
+                "Heng On": ["101","HEO"],"Ma On Shan": ["102","MOS"],"Wu Kai Sha": ["103","WKS"],"East Tsim Sha Tsui": ["80","ETS"],"Austin": ["111","AUS"],
+                "Tsuen Wan West": ["114","TWW"],"Kam Sheung Road": ["115","KSR"],"Yuen Long": ["116","YUL"],"Long Ping": ["117","LOP"],
+                "Tin Shui Wai": ["118","TIS"],"Siu Hong": ["119","SIH"],"Tuen Mun": ["120","TUM"],"Airport": ["47","AIR"],"AsiaWorld-Expo": ["56","AWE"]
+            };
 
 module.exports = (express) => {
     const router = express.Router();
@@ -99,6 +119,7 @@ module.exports = (express) => {
                     })
             });
         }
+        res.redirect('/getRelation');
     });
 
     router.get('/getRelation',function(req, res){
@@ -124,7 +145,7 @@ module.exports = (express) => {
                         //console.log(val.dataValues);
                         allArr.push(val.dataValues);
                     });
-                    console.log(allArr);
+                    //console.log(allArr);
                     allObj.showing = allArr;
                     res.render('getRelation',allObj);
                 })
@@ -132,6 +153,26 @@ module.exports = (express) => {
                     console.log(err);
                 })
             // })
+    });
+
+    router.post('/addmtrId',function(req, res){
+        for(var i in mtrInfo){
+            // console.log(mtrInfo[i][0]);
+            Station.update(
+                {
+                    mtrId:mtrInfo[i][0],
+                    mtrShort:mtrInfo[i][1]
+                },
+                {
+                    where:{english:i}
+                }
+            );
+        };
+        res.redirect('/addmtrId');
+    });
+
+    router.get('/addmtrId',function(req, res){
+        res.render('doneSetupDB');
     });
 
     return router;
