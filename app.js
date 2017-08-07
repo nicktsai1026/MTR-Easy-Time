@@ -6,7 +6,7 @@ const models = require('./models');
 const Line = models.line;
 const Station = models.station;
 const Line_station = models.line_station;
-//const setupPassport = require('./passport');
+const setupPassport = require('./passport');
 const router = require('./router')(express);
 const port = process.env.PORT || 8080;
 
@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({extended:true }));
 app.engine('handlebars', hb({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
-//setupPassport(app);
+setupPassport(app);
 app.use('/', router);
 
 app.get('/stylesheet.css', function(req, res){
