@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/nicktsai1026/mapbot#readme",
   "dependencies": {
+    "@google/maps": "^0.4.3",
+    "axios": "^0.16.2",
     "body-parser": "^1.17.2",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.15.3",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.5",
@@ -28,6 +31,7 @@
     "pause": "^0.1.0",
     "pg": "^6.3.0",
     "pg-hstore": "^2.3.2",
+    "redis": "^2.7.1",
     "sequelize": "^4.4.2",
     "telebot": "^1.2.3"
   }
