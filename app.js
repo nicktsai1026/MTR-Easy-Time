@@ -16,7 +16,9 @@ app.use(session({
     secret: 'supersecret'
 }));
 app.use(bodyParser.urlencoded({extended:true }));
-app.engine('handlebars', hb({defaultLayout: 'main'}));
+app.engine('handlebars', hb({
+    defaultLayout: 'main',
+}));
 app.set('view engine', 'handlebars');
 
 setupPassport(app);
@@ -26,17 +28,27 @@ app.get('/stylesheet.css', function(req, res){
     res.sendFile(__dirname + '/stylesheet.css');
 })
 
-app.get('/corah', function(req,res){
+app.get('/home/:language', function(req,res){
     selector.listStations()
     .then((lines) => {
+        if (req.params.language == 'english'){
+            lines.inEnglish = true;
+        } else {
+            lines.inEnglish = false;
+        }
         res.render('display', lines);
     })
 })
 
-app.get('/line/:id', function(req,res){
+app.get('/line/:id/:language', function(req,res){
     console.log(req.params.id);
     selector.listStations()
     .then((lines) => {
+        if (req.params.language == 'english'){
+            lines.inEnglish = true;
+        } else {
+            lines.inEnglish = false;
+        }
         Line_station.findAll({
             where:{
                 lineId:req.params.id
