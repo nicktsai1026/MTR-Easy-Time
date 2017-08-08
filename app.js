@@ -7,15 +7,18 @@ const models = require('./models');
 const Line = models.line;
 const Station = models.station;
 const Line_station = models.line_station;
+const selector = require('./selector');
 const setupPassport = require('./passport');
 const router = require('./router')(express);
-const port = process.env.PORT || 8080;
+//const port = process.env.PORT || 8080;
 
 app.use(session({
     secret: 'supersecret'
 }));
 app.use(bodyParser.urlencoded({extended:true }));
-app.engine('handlebars', hb({defaultLayout: 'main'}));
+app.engine('handlebars', hb({
+    defaultLayout: 'main',
+}));
 app.set('view engine', 'handlebars');
 
 setupPassport(app);
@@ -25,23 +28,61 @@ app.get('/stylesheet.css', function(req, res){
     res.sendFile(__dirname + '/stylesheet.css');
 })
 
-app.get('/corah', function(req,res){
-    Line.findAll()
-        .then((lines) => {
-            var arrLine = [];
-            var objLine = {};
-            //console.log(stations);
-            lines.forEach((val)=>{
-                //console.log(val.dataValues);
-                arrLine.push(val.dataValues);
-            });
-            objLine.show = arrLine;
-            res.render('display',objLine);
+app.get('/home/:language', function(req,res){
+    selector.listStations()
+    .then((lines) => {
+        if (req.params.language == 'english'){
+            lines.inEnglish = true;
+        } else {
+            lines.inEnglish = false;
+        }
+        res.render('display', lines);
+    })
+})
+
+app.get('/line/:id/:language', function(req,res){
+    console.log(req.params.id);
+    selector.listStations()
+    .then((lines) => {
+        if (req.params.language == 'english'){
+            lines.inEnglish = true;
+        } else {
+            lines.inEnglish = false;
+        }
+        Line_station.findAll({
+            where:{
+                lineId:req.params.id
+            },
+            include:[{
+                model:Station,
+                required:true
+            }]
+        })
+        .then((stations) => {
+            var arrStation = [];
+            function compare(a,b) {
+              if (a.dataValues.sequel < b.dataValues.sequel)
+                return -1;
+              if (a.dataValues.sequel > b.dataValues.sequel)
+                return 1;
+              return 0;
+            }
+            stations.sort(compare);
+            stations.forEach((val)=>{
+                arrStation.push(val.dataValues.station.dataValues);
+            })
+            lines.list = arrStation;
+            res.render('display', lines);
         })
         .catch((err)=>{
             console.log(err);
         })
+    })
 })
-// app.post('/'
 
-app.listen(port);
+
+// allow handlebars files to use files in public folder
+app.use(express.static('public'));
+
+
+app.listen(8080);

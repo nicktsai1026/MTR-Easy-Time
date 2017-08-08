@@ -50,12 +50,16 @@ const lines_abbreviation = {
     'West Rail Line': 'WRL',
     'Tung Chung Line': 'TCL',
     'Airport Express': 'AEL'
-}
+};
 
 module.exports = (express) => {
     const router = express.Router();
 
-    router.get('/', function (req, res) {
+    router.get('/public/stylesheet.css', function(req,res){
+        res.sendFile(__dirname + '/public/stylesheet.css');
+    });
+
+    router.get('/',function(req, res){
         res.render('createLine');
     });
 
@@ -202,12 +206,24 @@ module.exports = (express) => {
                 }
             );
         };
-        res.redirect('/addAbbre');
+        res.redirect('/login');
     });
 
-    router.get('/addAbbre', function (req, res) {
-        res.render('doneSetupDB');
+    router.get('/login', function (req, res) {
+        res.render('login');
     });
+
+    router.get('/auth/facebook',
+      passport.authenticate('facebook'));
+
+    router.get('/auth/facebook/callback',
+      passport.authenticate('facebook', { failureRedirect: '/login' }),
+      function(req, res) {
+        res.redirect('/home');
+      });
+    router.get('/home', function (req, res){
+        res.redirect('/home/chinese');
+    })
 
     return router;
 };

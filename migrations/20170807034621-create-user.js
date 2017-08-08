@@ -9,12 +9,9 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       telegramId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       facebookId: {
-        type: Sequelize.INTEGER
-      },
-      email: {
         type: Sequelize.STRING
       },
       createdAt: {
