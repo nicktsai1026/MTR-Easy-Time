@@ -55,7 +55,11 @@ const lines_abbreviation = {
 module.exports = (express) => {
     const router = express.Router();
 
-    router.get('/', function (req, res) {
+    router.get('/public/stylesheet.css', function(req,res){
+        res.sendFile(__dirname + '/public/stylesheet.css');
+    });
+
+    router.get('/',function(req, res){
         res.render('createLine');
     });
 

@@ -7,6 +7,7 @@ const models = require('./models');
 const Line = models.line;
 const Station = models.station;
 const Line_station = models.line_station;
+const selector = require('./selector');
 const setupPassport = require('./passport');
 const router = require('./router')(express);
 //const port = process.env.PORT || 8080;
@@ -26,22 +27,50 @@ app.get('/stylesheet.css', function(req, res){
 })
 
 app.get('/corah', function(req,res){
-    Line.findAll()
-        .then((lines) => {
-            var arrLine = [];
-            var objLine = {};
-            //console.log(stations);
-            lines.forEach((val)=>{
-                //console.log(val.dataValues);
-                arrLine.push(val.dataValues);
-            });
-            objLine.show = arrLine;
-            res.render('display',objLine);
+    selector.listStations()
+    .then((lines) => {
+        res.render('display', lines);
+    })
+})
+
+app.get('/line/:id', function(req,res){
+    console.log(req.params.id);
+    selector.listStations()
+    .then((lines) => {
+        Line_station.findAll({
+            where:{
+                lineId:req.params.id
+            },
+            include:[{
+                model:Station,
+                required:true
+            }]
+        })
+        .then((stations) => {
+            var arrStation = [];
+            function compare(a,b) {
+              if (a.dataValues.sequel < b.dataValues.sequel)
+                return -1;
+              if (a.dataValues.sequel > b.dataValues.sequel)
+                return 1;
+              return 0;
+            }
+            stations.sort(compare);
+            stations.forEach((val)=>{
+                arrStation.push(val.dataValues.station.dataValues);
+            })
+            lines.list = arrStation;
+            res.render('display', lines);
         })
         .catch((err)=>{
             console.log(err);
         })
+    })
 })
+
+
+// allow handlebars files to use files in public folder
+app.use(express.static('public'));
 
 
 app.listen(8080);
