@@ -42,6 +42,10 @@ const mtrInfo = {"Kennedy Town": ["83","KET"],"HKU": ["82","HKU"],"Sai Ying Pun"
 module.exports = (express) => {
     const router = express.Router();
 
+    router.get('/public/stylesheet.css', function(req,res){
+        res.sendFile(__dirname + '/public/stylesheet.css');
+    });
+
     router.get('/',function(req, res){
         res.render('createLine');
     });

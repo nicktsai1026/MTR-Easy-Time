@@ -1,4 +1,25 @@
-#KTL {
+#engbtn, #chibtn {
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 10px;
+  background: #242324;
+  padding: 0px;
+  border: solid #000000 2px;
+  text-decoration: none;
+  height:30px;
+  width:30px;
+  float:right;
+}
+
+#engbtn:hover, #chibtn:hover {
+  background: #49494a;
+  text-decoration: none;
+}
+
+/*#line, #station {
     -webkit-border-radius: 17;
     -moz-border-radius: 17;
     border-radius: 17px;
@@ -9,14 +30,28 @@
     padding: 10px 20px 10px 20px;
     border: solid #38c26f 4px;
     text-decoration: none;
+}*/
+
+#line1 {
+    -webkit-border-radius: 17;
+    -moz-border-radius: 17;
+    border-radius: 17px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 47px;
+    background: #119931;
+    padding: 10px 20px 10px 20px;
+    border: solid #38c26f 4px;
+    text-decoration: none;
+
 }
 
-#KTL:hover {
+#line1:hover {
     background: #35c211;
     text-decoration: none;
 }
 
-#TWL {
+#line2 {
   background: #ff0000;
   background-image: -webkit-linear-gradient(top, #ff0000, #b82b2b);
   background-image: -moz-linear-gradient(top, #ff0000, #b82b2b);
@@ -34,12 +69,12 @@
   text-decoration: none;
 }
 
-#TWL:hover {
+#line2:hover {
   background: #ff3333;
   text-decoration: none;
 }
 
-#IL {
+#line3 {
   background: #0076c4;
   background-image: -webkit-linear-gradient(top, #0076c4, #2980b9);
   background-image: -moz-linear-gradient(top, #0076c4, #2980b9);
@@ -57,7 +92,7 @@
   text-decoration: none;
 }
 
-#IL:hover {
+#line3:hover {
   background: #14a5ff;
   background-image: -webkit-linear-gradient(top, #14a5ff, #3498db);
   background-image: -moz-linear-gradient(top, #14a5ff, #3498db);
@@ -67,7 +102,7 @@
   text-decoration: none;
 }
 
-#SIL {
+#line4 {
   -webkit-border-radius: 17;
   -moz-border-radius: 17;
   border-radius: 17px;
@@ -80,12 +115,12 @@
   text-decoration: none;
 }
 
-#SIL:hover {
+#line4:hover {
   background: #59eb6f;
   text-decoration: none;
 }
 
-#TKOL {
+#line5 {
   -webkit-border-radius: 17;
   -moz-border-radius: 17;
   border-radius: 17px;
@@ -98,12 +133,12 @@
   text-decoration: none;
 }
 
-#TKOL:hover {
+#line5:hover {
   background: #d11bc5;
   text-decoration: none;
 }
 
-#TCL {
+#line6 {
   -webkit-border-radius: 17;
   -moz-border-radius: 17;
   border-radius: 17px;
@@ -116,12 +151,12 @@
   text-decoration: none;
 }
 
-#TCL:hover {
+#line6:hover {
   background: #e8b73a;
   text-decoration: none;
 }
 
-#AEL {
+#line7 {
   -webkit-border-radius: 17;
   -moz-border-radius: 17;
   border-radius: 17px;
@@ -134,12 +169,12 @@
   text-decoration: none;
 }
 
-#AEL:hover {
+#line7:hover {
   background: #00ad7c;
   text-decoration: none;
 }
 
-#ERL {
+#line8 {
   -webkit-border-radius: 17;
   -moz-border-radius: 17;
   border-radius: 17px;
@@ -152,12 +187,12 @@
   text-decoration: none;
 }
 
-#ERL:hover {
+#line8:hover {
   background: #66edff;
   text-decoration: none;
 }
 
-#MOSL {
+#line9 {
   -webkit-border-radius: 17;
   -moz-border-radius: 17;
   border-radius: 17px;
@@ -170,25 +205,25 @@
   text-decoration: none;
 }
 
-#MOSL:hover {
+#line9:hover {
   background: #d98d1c;
   text-decoration: none;
 }
 
-#WRL {
+#line10 {
   -webkit-border-radius: 17;
   -moz-border-radius: 17;
   border-radius: 17px;
   font-family: Arial;
   color: #ffffff;
   font-size: 47px;
-  background: #990087;
+  background: #730065;
   padding: 10px 20px 10px 20px;
   border: solid #a3418b 4px;
   text-decoration: none;
 }
 
-#WRL:hover {
+#line10:hover {
   background: #bd0d94;
   text-decoration: none;
 }
