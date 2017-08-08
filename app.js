@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const hb = require('express-handlebars');
+const session = require('express-session');
 const models = require('./models');
 const Line = models.line;
 const Station = models.station;
@@ -9,8 +11,11 @@ const Line_station = models.line_station;
 const selector = require('./selector');
 const setupPassport = require('./passport');
 const router = require('./router')(express);
-const port = process.env.PORT || 8080;
+//const port = process.env.PORT || 8080;
 
+app.use(session({
+    secret: 'supersecret'
+}));
 app.use(bodyParser.urlencoded({extended:true }));
 app.engine('handlebars', hb({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -67,4 +72,4 @@ app.get('/line/:id', function(req,res){
 // allow handlebars files to use files in public folder
 app.use(express.static('public'));
 
-app.listen(port);
+app.listen(8080);
