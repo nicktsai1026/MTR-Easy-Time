@@ -50,7 +50,7 @@ const lines_abbreviation = {
     'West Rail Line': 'WRL',
     'Tung Chung Line': 'TCL',
     'Airport Express': 'AEL'
-}
+};
 
 module.exports = (express) => {
     const router = express.Router();
@@ -206,11 +206,11 @@ module.exports = (express) => {
                 }
             );
         };
-        res.redirect('/addAbbre');
+        res.redirect('/login');
     });
 
-    router.get('/addAbbre', function (req, res) {
-        res.render('doneSetupDB');
+    router.get('/login', function (req, res) {
+        res.render('login');
     });
 
     router.get('/auth/facebook',
@@ -219,8 +219,6 @@ module.exports = (express) => {
     router.get('/auth/facebook/callback',
       passport.authenticate('facebook', { failureRedirect: '/addmtrId' }),
       function(req, res) {
-          console.log('hello');
-        // Successful authentication, redirect home.
         res.redirect('/');
       });
 

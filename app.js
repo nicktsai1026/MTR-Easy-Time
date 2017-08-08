@@ -68,7 +68,9 @@ app.get('/line/:id', function(req,res){
     })
 })
 
+
 // allow handlebars files to use files in public folder
 app.use(express.static('public'));
+
 
 app.listen(8080);
