@@ -19,36 +19,29 @@
   text-decoration: none;
 }
 
-/*#line, #station {
+.line, .station, #stationName{
     -webkit-border-radius: 17;
     -moz-border-radius: 17;
     border-radius: 17px;
     font-family: Arial;
     color: #ffffff;
     font-size: 47px;
-    background: #119931;
     padding: 10px 20px 10px 20px;
-    border: solid #38c26f 4px;
     text-decoration: none;
-}*/
+}
 
-#line1 {
-    -webkit-border-radius: 17;
-    -moz-border-radius: 17;
-    border-radius: 17px;
-    font-family: Arial;
-    color: #ffffff;
-    font-size: 47px;
-    background: #119931;
-    padding: 10px 20px 10px 20px;
-    border: solid #38c26f 4px;
+.line:hover, .station:hover {
     text-decoration: none;
 
 }
 
+#line1 {
+    background: #119931;
+    border: solid #38c26f 4px;
+}
+
 #line1:hover {
     background: #35c211;
-    text-decoration: none;
 }
 
 #line2 {
@@ -58,20 +51,11 @@
   background-image: -ms-linear-gradient(top, #ff0000, #b82b2b);
   background-image: -o-linear-gradient(top, #ff0000, #b82b2b);
   background-image: linear-gradient(to bottom, #ff0000, #b82b2b);
-  -webkit-border-radius: 17;
-  -moz-border-radius: 17;
-  border-radius: 17px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 47px;
-  padding: 10px 20px 10px 20px;
   border: solid #f07878 4px;
-  text-decoration: none;
 }
 
 #line2:hover {
   background: #ff3333;
-  text-decoration: none;
 }
 
 #line3 {
@@ -81,15 +65,7 @@
   background-image: -ms-linear-gradient(top, #0076c4, #2980b9);
   background-image: -o-linear-gradient(top, #0076c4, #2980b9);
   background-image: linear-gradient(to bottom, #0076c4, #2980b9);
-  -webkit-border-radius: 17;
-  -moz-border-radius: 17;
-  border-radius: 17px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 47px;
-  padding: 10px 20px 10px 20px;
   border: solid #87c3e6 4px;
-  text-decoration: none;
 }
 
 #line3:hover {
@@ -99,131 +75,67 @@
   background-image: -ms-linear-gradient(top, #14a5ff, #3498db);
   background-image: -o-linear-gradient(top, #14a5ff, #3498db);
   background-image: linear-gradient(to bottom, #14a5ff, #3498db);
-  text-decoration: none;
 }
 
 #line4 {
-  -webkit-border-radius: 17;
-  -moz-border-radius: 17;
-  border-radius: 17px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 47px;
   background: #65cc56;
-  padding: 10px 20px 10px 20px;
   border: solid #8ae695 4px;
-  text-decoration: none;
 }
 
 #line4:hover {
   background: #59eb6f;
-  text-decoration: none;
 }
 
 #line5 {
-  -webkit-border-radius: 17;
-  -moz-border-radius: 17;
-  border-radius: 17px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 47px;
   background: #b51aab;
-  padding: 10px 20px 10px 20px;
   border: solid #c558db 4px;
-  text-decoration: none;
 }
 
 #line5:hover {
   background: #d11bc5;
-  text-decoration: none;
 }
 
 #line6 {
-  -webkit-border-radius: 17;
-  -moz-border-radius: 17;
-  border-radius: 17px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 47px;
   background: #e69200;
-  padding: 10px 20px 10px 20px;
   border: solid #ffb575 4px;
-  text-decoration: none;
 }
 
 #line6:hover {
   background: #e8b73a;
-  text-decoration: none;
 }
 
 #line7 {
-  -webkit-border-radius: 17;
-  -moz-border-radius: 17;
-  border-radius: 17px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 47px;
   background: #008277;
-  padding: 10px 20px 10px 20px;
   border: solid #069e8a 4px;
-  text-decoration: none;
 }
 
 #line7:hover {
   background: #00ad7c;
-  text-decoration: none;
 }
 
 #line8 {
-  -webkit-border-radius: 17;
-  -moz-border-radius: 17;
-  border-radius: 17px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 47px;
   background: #52e4fa;
-  padding: 10px 20px 10px 20px;
   border: solid #9ef0ff 4px;
-  text-decoration: none;
 }
 
 #line8:hover {
   background: #66edff;
-  text-decoration: none;
 }
 
 #line9 {
-  -webkit-border-radius: 17;
-  -moz-border-radius: 17;
-  border-radius: 17px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 47px;
   background: #b35c00;
-  padding: 10px 20px 10px 20px;
   border: solid #c98754 4px;
-  text-decoration: none;
 }
 
 #line9:hover {
   background: #d98d1c;
-  text-decoration: none;
 }
 
 #line10 {
-  -webkit-border-radius: 17;
-  -moz-border-radius: 17;
-  border-radius: 17px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 47px;
   background: #730065;
-  padding: 10px 20px 10px 20px;
   border: solid #a3418b 4px;
-  text-decoration: none;
 }
 
 #line10:hover {
   background: #bd0d94;
-  text-decoration: none;
 }
