@@ -30,6 +30,13 @@ app.get('/stylesheet.css', function(req, res){
     res.sendFile(__dirname + '/stylesheet.css');
 })
 
+app.get('/login', function(req,res){
+    selector.listStations()
+    .then((lines) => {
+        res.render('login', lines);
+    })
+})
+
 app.get('/home', function(req,res){
     //console.log(req.user.dataValues.facebookId);
     selector.listStations()
@@ -44,13 +51,6 @@ app.get('/home', function(req,res){
             });
             lines.fbInfo = fbPersonalInfo;
             res.render('display', lines);
-        })
-})
-
-app.get('/login', function(req,res){
-    selector.listStations()
-        .then((lines) => {
-            res.render('login', lines);
         })
 })
 
@@ -97,7 +97,6 @@ app.get('/line/:id', function(req,res){
             })
         })
 })
-
 
 // allow handlebars files to use files in public folder
 app.use(express.static('public'));

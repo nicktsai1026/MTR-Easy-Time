@@ -1,18 +1,48 @@
-<div>
-    <a href="/eng"><button id="engbtn">En</button>
-    <a href="/chi"><button id="chibtn">中</button>
+<div class="container">
+    <a href="/home/english"><button id="engbtn">En</button></a>
+    <a href="/home/chinese"><button id="chibtn">中</button></a>
 </div>
 
-<div>
-    <h1>Lines</h1>
+<div class="container" style="height:auto">
+    <!-- if the property inEnglish exists -->
+    {{#if inEnglish}}
+    <h1>Lines in English</h1>
     {{#show}}
-    <a href="/line/{{id}}"><button id='line{{id}}' class="line" type="button" name="button">{{chinese}}</button></a>
+    <a href="/line/{{id}}/english"><button id='line{{id}}' class="line col-xl-3 col-lg-3 col-md-4 col-sm-6" type="button" name="button">{{english}}</button></a>
     {{/show}}
+    {{else}}
+    <h1>Lines in Chinese</h1>
+    {{#show}}
+    <a href="/line/{{id}}/chinese"><button id='line{{id}}' class="line col-xl-3 col-lg-3 col-md-4 col-sm-6" type="button" name="button">{{chinese}}</button></a>
+    {{/show}}
+    {{/if}}
 </div>
 
-<div class="stations">
+<div class="container">
+    {{#if inEnglish}}
     <h1>Stations</h1>
     {{#list}}
-    <a href="/station/{{id}}"><button class="station" type="button" name="button">{{chinese}}</button></a>
+        <button id="station-{{id}}" class="station col-xl-3 col-lg-3 col-md-4 col-sm-6" type="button" name="button">{{english}}</button>
     {{/list}}
+    {{else}}
+    <h1>Stations</h1>
+    {{#list}}
+        <button id="station-{{id}}" class="station col-xl-3 col-lg-3 col-md-4 col-sm-6" type="button" name="button">{{chinese}}</button>
+    {{/list}}
+    {{/if}}
+</div>
+
+<div class="container">
+    <h1>Add station to favourite</h1>
+    <div id="fav">
+        <!-- selected favourite station will be appended here -->
+    </div>
+
+    <div> <!-- remark box -->
+        <form action="#" method="post">
+            <input type="text" name="inputBox" placeholder="enter your text here">
+        </form>
+    </div>
+    <!-- submit button -->
+    <button id="add" class="submit col-xl-2 col-lg-2 col-md-2 col-sm-3">Add station</button>
 </div>
