@@ -209,9 +209,9 @@ module.exports = (express) => {
         res.redirect('/login');
     });
 
-    router.get('/login', function (req, res) {
-        res.render('login');
-    });
+    // router.get('/login', function (req, res) {
+    //     res.render('login');
+    // });
 
     router.get('/auth/facebook',
       passport.authenticate('facebook'));
