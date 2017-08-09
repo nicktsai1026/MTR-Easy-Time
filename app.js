@@ -37,16 +37,21 @@ app.get('/login', function(req,res){
     })
 })
 
-app.get('/home', function(req,res){
-    //console.log(req.user.dataValues.facebookId);
+app.get('/home/:language', function(req,res){
     selector.listStations()
         .then((lines) => {
+            //console.log(req.user.dataValues.facebookId);
+            if (req.params.language == 'english'){
+                lines.inEnglish = true;
+            } else {
+                lines.inEnglish = false;
+            }
             var fbPersonalInfo = [];
             Redis.get(req.user.dataValues.facebookId,function(err,data){
                 if(err){
                     return console.log(err);
                 }
-                console.log(data);
+                // console.log(data);
                 fbPersonalInfo.push(JSON.parse(data));
             });
             lines.fbInfo = fbPersonalInfo;
@@ -54,10 +59,15 @@ app.get('/home', function(req,res){
         })
 })
 
-app.get('/line/:id', function(req,res){
-    console.log(req.params.id);
+app.get('/line/:id/:language', function(req,res){
+    //console.log(req.params.id);
     selector.listStations()
         .then((lines) => {
+            if (req.params.language == 'english'){
+                lines.inEnglish = true;
+            } else {
+                lines.inEnglish = false;
+            }
             Line_station.findAll({
                 where:{
                     lineId:req.params.id
@@ -88,7 +98,7 @@ app.get('/line/:id', function(req,res){
                 stations.sort(compare);
                 stations.forEach((val)=>{
                     arrStation.push(val.dataValues.station.dataValues);
-                });
+                })
                 lines.list = arrStation;
                 res.render('display', lines);
             })
