@@ -209,17 +209,17 @@ module.exports = (express) => {
         res.redirect('/login');
     });
 
-    router.get('/login', function (req, res) {
-        res.render('login');
-    });
+    // router.get('/login', function (req, res) {
+    //     res.render('login');
+    // });
 
     router.get('/auth/facebook',
       passport.authenticate('facebook'));
 
     router.get('/auth/facebook/callback',
-      passport.authenticate('facebook', { failureRedirect: '/addmtrId' }),
+      passport.authenticate('facebook', { failureRedirect: '/login' }),
       function(req, res) {
-        res.redirect('/');
+        res.redirect('/home');
       });
 
     return router;
