@@ -24,20 +24,13 @@
         $(document).ready(function(){
             var id = null;
             $(".station").click(function(){
-                // delete previous input
-                $('#fav').empty();
-                //get id of selected station
                 id = $(this).attr('id').split("-")[1];
+                var cssId = $(this).attr('class').split(" ")[4];
                 var stationName = $(this).text();
-                // append station
-                $('#fav').append(
-                    "<button id=\"stationName\" class=\"col-xl-3 col-lg-3 col-md-4 col-sm-6\">" + stationName + "</button>"
-                )            });
-            $("#add").click(function(){
-                if (id) {
-                    // post request to table !!!!!
-                }
-            })
-        })
+                $('#stationName').addClass(cssId).text(stationName);
+                $('#database').val(stationName);    
+            });
+
+        });
     </script>
 </html>

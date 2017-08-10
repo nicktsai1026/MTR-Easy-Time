@@ -32,9 +32,9 @@ app.get('/stylesheet.css', function(req, res){
 
 app.get('/login', function(req,res){
     selector.listStations()
-    .then((lines) => {
-        res.render('login', lines);
-    })
+        .then((lines) => {
+            res.render('login', lines);
+        })
 })
 
 app.get('/home/:language', function(req,res){
@@ -97,7 +97,9 @@ app.get('/line/:id/:language', function(req,res){
                 }
                 stations.sort(compare);
                 stations.forEach((val)=>{
-                    arrStation.push(val.dataValues.station.dataValues);
+                    var box = val.dataValues.station.dataValues;
+                    box.cssId = req.params.id;
+                    arrStation.push(box);
                 })
                 lines.list = arrStation;
                 res.render('display', lines);
@@ -105,6 +107,46 @@ app.get('/line/:id/:language', function(req,res){
             .catch((err)=>{
                 console.log(err);
             })
+        })
+})
+
+app.post('/addFavoriteStation',function(req, res){
+    // console.log(req.session.passport.user);
+    // console.log(req.body);
+    Favor.findOne({where:{remark:req.body.remark}})
+        .then((favor)=>{
+            console.log(favor);
+            if(!favor){
+                const favor = new Favor();
+                Favor.create({
+                    facebookId:req.session.passport.user,
+                    remark:req.body.remark,
+                    stationName:req.body.stationName
+                })
+            }
+            res.redirect('/home/:language');
+        })
+})
+
+app.get('/showFavor',function(req, res){
+    Favor.findAll({where:{facebookId:req.session.passport.user}})
+        .then((favors)=>{
+            var arrFavor = [];
+            var objFavor = {};
+            favors.forEach((val)=>{
+                arrFavor.push(val.dataValues);
+            });
+            var fbPersonalInfo = [];
+            Redis.get(req.session.passport.user,function(err,data){
+                if(err){
+                    return console.log(err);
+                }
+                // console.log(data);
+                fbPersonalInfo.push(JSON.parse(data));
+            });
+            objFavor.fbInfo = fbPersonalInfo;
+            objFavor.showFavorList = arrFavor;
+            res.render('favoriteList', objFavor);
         })
 })
 

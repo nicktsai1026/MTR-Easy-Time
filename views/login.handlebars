@@ -3,141 +3,41 @@ body {
   margin: 0px;
   padding: 0px;
 }
-.overlay {
+.container {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
     text-align: center;
-    /*height: 600px;*/
     background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)),black no-repeat;
 }
 .showlogin {
     text-align: center;
     border: solid 2px black;
-    width: 500px;
-    padding-bottom: 20px;
+    padding: 10px 0px 30px 0px;
     background: white;
+    margin: 10px;
+}
+.showbtn {
+    padding: 0px;
+    opacity: 0.3;
+    margin-bottom: 10px;
 }
 .line {
-    opacity: 0.2;
-    margin: 5px;
-}
-h1 {
-    opacity: 0.3;
-    padding-top: 50px;
-    margin: 0px;
-}
-.contain {
-    padding-top: 20px;
-    display: inline-block;
-    text-align: center;
+    padding: 0px;
+    margin: 0px 0px 10px 0px;
 }
 </style>
 
-    <div class="overlay">
-        <h1>Lines</h1>
-        {{#show}}
-        <button id='line{{id}}' class="line" type="button" name="button">{{chinese}}</button>
-        {{/show}}
-        <div class="contain">
-            <div class="showlogin">
-                <h2>login to facebook and add a favorite station</h2>
-                <!-- <a href="/auth/facebook" onclick="fbLogin()" id="fbLink"><img src="https://i.stack.imgur.com/LKMP7.png"/></a> -->
-                <a href="/auth/facebook"><img src="https://i.stack.imgur.com/LKMP7.png"/></a>
-            </div>
-        </div>
+<div class="container">
+    <h1> MTR Lines </h1>
+    <div class="showlogin">
+        <h2>login to facebook and add a favorite station</h2>
+        <a href="/auth/facebook"><img src="https://i.stack.imgur.com/LKMP7.png"/></a>
     </div>
-
-<!-- <script>
-$(document).ready(function () {
-    $('#callBtn').click(function () {
-        callAPI($('#fbId').val(), $('#access_tk').val());
-    });
-});
-
-function callAPI(pageId, access_token_str) {
-    console.log(pageId)
-    console.log(access_token_str)
-    FB.api(
-        '/' + pageId,
-        'GET',
-        {
-            "fields": "name,fan_count,category,about,picture",
-            "access_token": access_token_str
-        },
-        function (response) {
-            var pageName = response.name;
-            var pageLikes = response.fan_count;
-            var pageCategory = response.category;
-            var pageAbout = response.about;
-            var pageImg = response.picture.data.url;
-
-            var results =
-                '<img src=' + pageImg + '>' +
-                '<h3>Page Name</h3>' +
-                '<p>' + pageName + '</p>' +
-                '<h3>No. of Likes</h3>' +
-                '<p>' + pageLikes + '</p>' +
-                '<h3>Category</h3>' +
-                '<p>' + pageCategory + '</p>' +
-                '<h3>About</h3>' +
-                '<p>' + pageAbout + '</p>' +
-                '<hr>'
-
-            $("ul").prepend("<li>" + results + "</li>");
-        }
-    );
-}
-
-window.fbAsyncInit = function () {
-    FB.init({
-        appId: '109100156427112',
-        cookie: true,
-        xfbml: true,
-        version: 'v2.10'
-    });
-    FB.AppEvents.logPageView();
-};
-
-(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) { return; }
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-
-// Facebook login with JavaScript SDK
-var accessToken
-function fbLogin() {
-    FB.login(function (response) {
-        if (response.authResponse) {
-            // Get and display the user profile data
-            getFbUserData();
-            accessToken = response.authResponse.accessToken;
-            document.getElementById("access_tk").value = accessToken;
-            console.log("Loggin this from getFbUserData " + accessToken)
-        } else {
-            document.getElementById('status').innerHTML = 'User cancelled login or did not fully authorize.';
-        }
-    }, { scope: 'email' });
-}
-
-// Fetch the user profile data from facebook
-function getFbUserData() {
-    FB.api('/me', { locale: 'en_US', fields: 'id,first_name,last_name,email,link,gender,locale,picture' },
-        function (response) {
-            document.getElementById('fbLink').setAttribute("onclick", "fbLogout()");
-            document.getElementById('fbLink').innerHTML = 'Logout from Facebook';
-            document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.first_name + '!';
-            document.getElementById('userData').innerHTML = '<p><b>FB ID:</b> ' + response.id + '</p><p><b>Name:</b> ' + response.first_name + ' ' + response.last_name + '</p><p><b>Email:</b> ' + response.email + '</p><p><b>Gender:</b> ' + response.gender + '</p><p><b>Locale:</b> ' + response.locale + '</p><p><b>Picture:</b> <img src="' + response.picture.data.url + '"/></p><p><b>FB Profile:</b> <a target="_blank" href="' + response.link + '">click to view profile</a></p>';
-        });
-}
-// Logout from facebook
-    function fbLogout() {
-        FB.logout(function () {
-            document.getElementById('fbLink').setAttribute("onclick", "fbLogin()");
-            document.getElementById('fbLink').innerHTML = '<img src="fblogin.png"/>';
-            document.getElementById('userData').innerHTML = '';
-            document.getElementById('status').innerHTML = 'You have successfully logout from Facebook.';
-        });
-    }
-
-</script> -->
+    <div class="col-sm-12 showbtn">
+        {{#show}}
+        <button id='line{{id}}' class="col-xs-6 line" type="button" name="button">{{chinese}}</button>
+        {{/show}}
+    </div>
+</div>

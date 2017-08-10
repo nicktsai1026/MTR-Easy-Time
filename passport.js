@@ -17,8 +17,6 @@ module.exports = (app) => {
         function(accessToken, refreshToken, profile, cb) {
             User.findOrCreate({where:{ facebookId: profile.id }})
                 .then(function(user){
-                    // console.log(accessToken);
-                    // console.log(profile);
                     var fbInfoObj = {
                         access_token:accessToken,
                         fbId:profile.id,
