@@ -15,6 +15,7 @@ axios.get('https://maps.googleapis.com/maps/api/directions/json?origin=' + origi
 '&destination=' + destination + '&mode=transit&key=AIzaSyBoFN8cy4YjlKB8EF6mccM6Re4DOzzMn04')
     .then((response) => {
         console.log(response.data.routes[0].legs[0].duration.text)
+        console.log(response.data.routes[0])
     })
     .catch((err)=>{
         console.log(err)
