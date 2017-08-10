@@ -12,10 +12,12 @@ module.exports = {
         type: Sequelize.STRING
       },
       remark: {
+        allowNull: false,
         type: Sequelize.STRING,
         unique:true
       },
       stationName: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {

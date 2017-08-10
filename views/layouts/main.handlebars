@@ -25,10 +25,10 @@
             var id = null;
             $(".station").click(function(){
                 id = $(this).attr('id').split("-")[1];
-                var cssId = $(this).attr('class').split(" ")[4];
+                var cssId = $(this).attr('class').split(" ")[3];
                 var stationName = $(this).text();
                 $('#stationName').addClass(cssId).text(stationName);
-                $('#database').val(stationName);    
+                $('#database').val(stationName);
             });
 
         });
