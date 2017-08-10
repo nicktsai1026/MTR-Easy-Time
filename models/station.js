@@ -8,7 +8,6 @@ module.exports = function(sequelize, DataTypes) {
   });
   station.associate =  function(models) {
       station.hasMany(models.line_station,{targetKey:"stationId"});
-      station.hasMany(models.favor,{targetKey:"stationId"});
   }
   return station;
 };

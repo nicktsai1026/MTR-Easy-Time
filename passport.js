@@ -2,6 +2,7 @@ const passport = require('passport');
 const facebookStrategy = require('passport-facebook').Strategy;
 const models = require('./models');
 const User = models.user;
+const Redis = require('./redis');
 
 module.exports = (app) => {
     app.use(passport.initialize());
@@ -10,13 +11,23 @@ module.exports = (app) => {
     passport.use('facebook', new facebookStrategy({
         clientID: '109100156427112',
         clientSecret: '6fcf61cd163db93babd249db426d73d9',
-        callbackURL: 'https://bc284988.ngrok.io/auth/facebook/callback'
+        callbackURL: 'https://2a6921d9.ngrok.io/auth/facebook/callback',
+        profileFields:['id','displayName','photos','email']
         },
         function(accessToken, refreshToken, profile, cb) {
-            console.log(profile);
             User.findOrCreate({where:{ facebookId: profile.id }})
                 .then(function(user){
-                    console.log(user);
+                    var fbInfoObj = {
+                        access_token:accessToken,
+                        fbId:profile.id,
+                        fbName:profile.displayName,
+                        fbPhoto:profile.photos[0].value
+                    };
+                    Redis.set(profile.id,JSON.stringify(fbInfoObj),function(err,data){
+                        if(err){
+                            return console.log(err);
+                        }
+                    });
                     return cb(null,user);
                 })
                 .catch((err)=>{

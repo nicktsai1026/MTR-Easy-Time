@@ -140,9 +140,6 @@ module.exports = (express) => {
     });
 
     router.get('/getRelation', function (req, res) {
-        // Line.findOne({where:{id:1}})
-        //     .then((line)=>{
-        //         console.log(line);
         Line_station.findAll({
             where: {
                 lineId: 1
@@ -169,7 +166,6 @@ module.exports = (express) => {
             .catch((err) => {
                 console.log(err);
             })
-        // })
     });
 
     router.post('/addmtrId', function (req, res) {
@@ -209,10 +205,6 @@ module.exports = (express) => {
         res.redirect('/login');
     });
 
-    router.get('/login', function (req, res) {
-        res.render('login');
-    });
-
     router.get('/auth/facebook',
       passport.authenticate('facebook'));
 
@@ -221,6 +213,7 @@ module.exports = (express) => {
       function(req, res) {
         res.redirect('/home');
       });
+
     router.get('/home', function (req, res){
         res.redirect('/home/chinese');
     })

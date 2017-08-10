@@ -1,19 +1,24 @@
-<div class="container">
+<div class="showFavor">
+    <a href="/showFavor"><button type="button" name="button">Check my favor</button></a>
+</div>
+
+<div class="languagebtn">
     <a href="/home/english"><button id="engbtn">En</button></a>
     <a href="/home/chinese"><button id="chibtn">中</button></a>
 </div>
+
 
 <div class="container" style="height:auto">
     <!-- if the property inEnglish exists -->
     {{#if inEnglish}}
     <h1>Lines in English</h1>
     {{#show}}
-    <a href="/line/{{id}}/english"><button id='line{{id}}' class="line col-xl-3 col-lg-3 col-md-4 col-sm-6" type="button" name="button">{{english}}</button></a>
+    <a href="/line/{{id}}/english"><button id='line{{id}}' class="col-xl-3 col-lg-3 col-md-4 col-sm-5 line" type="button" name="button">{{english}}</button></a>
     {{/show}}
     {{else}}
     <h1>Lines in Chinese</h1>
     {{#show}}
-    <a href="/line/{{id}}/chinese"><button id='line{{id}}' class="line col-xl-3 col-lg-3 col-md-4 col-sm-6" type="button" name="button">{{chinese}}</button></a>
+    <a href="/line/{{id}}/chinese"><button id='line{{id}}' class="col-xl-3 col-lg-3 col-md-4 col-sm-5 line" type="button" name="button">{{chinese}}</button></a>
     {{/show}}
     {{/if}}
 </div>
@@ -22,27 +27,31 @@
     {{#if inEnglish}}
     <h1>Stations</h1>
     {{#list}}
-        <button id="station-{{id}}" class="station col-xl-3 col-lg-3 col-md-4 col-sm-6" type="button" name="button">{{english}}</button>
+        <button id="station-{{id}}" class="col-xl-3 col-lg-3 col-md-4 col-sm-5 lineStation{{cssId}} station" type="button" name="button">{{english}}</button>
     {{/list}}
     {{else}}
     <h1>Stations</h1>
     {{#list}}
-        <button id="station-{{id}}" class="station col-xl-3 col-lg-3 col-md-4 col-sm-6" type="button" name="button">{{chinese}}</button>
+        <button id="station-{{id}}" class="col-xl-3 col-lg-3 col-md-4 col-sm-5 lineStation{{cssId}} station" type="button" name="button">{{chinese}}</button>
     {{/list}}
     {{/if}}
 </div>
 
 <div class="container">
     <h1>Add station to favourite</h1>
-    <div id="fav">
-        <!-- selected favourite station will be appended here -->
-    </div>
-
-    <div> <!-- remark box -->
-        <form action="#" method="post">
-            <input type="text" name="inputBox" placeholder="enter your text here">
+    <div>
+        <form action="/addFavoriteStation" method="post" id="addStation">
+            <div id="fav">
+                <button id="stationName" class="col-xl-12 col-lg-12 col-md-12 col-sm-12"></button>
+                <!-- selected favourite station will be appended here. See script in main.handlebars -->
+                <input id= "database" type="hidden" name="stationName" value="">
+            </div>
+            <div>
+                <input type="text" name="remark" placeholder="enter your text here">
+            </div>
+            <div>
+                <input class="sub" type="submit" value="Submit">
+            </div>
         </form>
     </div>
-    <!-- submit button -->
-    <button id="add" class="submit col-xl-2 col-lg-2 col-md-2 col-sm-3">Add station</button>
 </div>
