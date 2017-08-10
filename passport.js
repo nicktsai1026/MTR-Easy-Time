@@ -12,27 +12,31 @@ module.exports = (app) => {
         clientID: '109100156427112',
         clientSecret: '6fcf61cd163db93babd249db426d73d9',
         callbackURL: 'https://2a6921d9.ngrok.io/auth/facebook/callback',
-        profileFields:['id','displayName','photos','email']
-        },
-        function(accessToken, refreshToken, profile, cb) {
-            User.findOrCreate({where:{ facebookId: profile.id }})
-                .then(function(user){
-                    var fbInfoObj = {
-                        access_token:accessToken,
-                        fbId:profile.id,
-                        fbName:profile.displayName,
-                        fbPhoto:profile.photos[0].value
-                    };
-                    Redis.set(profile.id,JSON.stringify(fbInfoObj),function(err,data){
-                        if(err){
-                            return console.log(err);
-                        }
+        profileFields: ['id', 'displayName', 'photos', 'email']
+    },
+        function (accessToken, refreshToken, profile, cb) {
+            client.get('from', function (err, data) {
+                if (err) return console.log(err);
+                console.log("The telegram ID is " + data)
+            })
+                User.findOrCreate({ where: { facebookId: profile.id } })
+                    .then(function (user) {
+                        var fbInfoObj = {
+                            access_token: accessToken,
+                            fbId: profile.id,
+                            fbName: profile.displayName,
+                            fbPhoto: profile.photos[0].value
+                        };
+                        Redis.set(profile.id, JSON.stringify(fbInfoObj), function (err, data) {
+                            if (err) {
+                                return console.log(err);
+                            }
+                        });
+                        return cb(null, user);
+                    })
+                    .catch((err) => {
+                        return cb(err);
                     });
-                    return cb(null,user);
-                })
-                .catch((err)=>{
-                    return cb(err);
-                });
         }
     ));
 
@@ -46,6 +50,10 @@ module.exports = (app) => {
                 facebookId: id
             }
         }).then(function (user) {
+            client.get('from', function (err, data) {
+                if (err) return console.log(err);
+                console.log("The telegram ID is " + data)
+            })
             if (user == null) {
                 done(new Error('Wrong user id.'));
             }

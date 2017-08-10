@@ -55,23 +55,21 @@ const bot = new TeleBot({
 
 // On commands
 bot.on(['/start'], msg => {
-    console.log(msg.from.id)
-    console.log(msg.chat.id)
     let replyMarkup = bot.keyboard([
         [BUTTONS.home.label],
         [BUTTONS.lines.label, BUTTONS.types.label],
         [BUTTONS.hide.label]
     ], { resize: true });
     bot.sendMessage(msg.from.id, 'Welcome! Checking the time it takes' +
-        ' for an MTR ride has never been so easy!', { replyMarkup })
+        ' for an MTR ride has never been so easy!')
         .then(() => {
-            bot.sendMessage(msg.from.id, 'Press [🚇 Quick Check] to type out the departure' +
+            bot.sendMessage(msg.from.id, 'Press |🚇 Quick Check| to type out the departure' +
                 ' and destination station.')
                 .then(() => {
-                    bot.sendMessage(msg.from.id, 'Or just press [🚉  All lines] and tap your' +
+                    bot.sendMessage(msg.from.id, 'Or just press |🚉  All lines| and tap your' +
                         ' way to see the time it takes.')
                         .then(() => {
-                            return bot.sendMessage(msg.from.id, 'Enjoy! 😇')
+                            return bot.sendMessage(msg.from.id, 'Enjoy! 😇', { replyMarkup })
                         })
                 })
         })
@@ -88,12 +86,16 @@ bot.on(['/restart'], msg => {
 
 // Hide keyboard
 bot.on('/fav', msg => {
+    var telegramId = msg.chat.id
+    client.set('telegram', telegramId, function (err, data) {
+        if (err) return console.log(err);
+    })
     let replyMarkup = bot.inlineKeyboard([
-        [bot.inlineButton('Add favourite', { url: 'http://www.mtr.com.hk/en/customer/services/service_hours_search.php?query_type=search&station=39' })],
-        [bot.inlineButton('Get favourite', { url: 'http://www.mtr.com.hk/en/customer/services/service_hours_search.php?query_type=search&station=39' })]
+        [bot.inlineButton('Add favourite', { url: 'http://10.107.106.242:8080/login' }),
+        bot.inlineButton('Get favourite', { url: 'http://www.mtr.com.hk/en/customer/services/service_hours_search.php?query_type=search&station=39' })]
     ])
     return bot.sendMessage(
-        msg.from.id, 'Hide keyboard example. Type /back to show.', { replyMarkup }
+        msg.from.id, 'Manage your favourites here:', { replyMarkup }
     );
 });
 
@@ -126,7 +128,7 @@ bot.on('ask.departure', msg => {
     const departure = msg.text;
     // Station.findOne({ where: { id: val.dataValues.stationId } })
     console.log(departure)
-    client.set('fromx', departure, function (err, data) {
+    client.set('from', departure, function (err, data) {
         if (err) return console.log(err);
     })
     return bot.sendMessage(msg.from.id, `Okay, ${departure} it is. Then where are you going?`, { ask: 'destination' });
@@ -136,7 +138,7 @@ bot.on('ask.destination', msg => {
     var fromStation = ''
     var toStation = ''
     const destination = msg.text;
-    console.log(destination)
+
     client.set('to', destination, function (err, data) {
         if (err) return console.log(err);
         console.log(data)
@@ -176,9 +178,9 @@ bot.on('/map', msg => {
     client.get('to', function (err, data) {
         if (err) return console.log(err);
         console.log("Getting the map of " + data)
-        Station.findOne({ where: { english: data } })
+        var data = data.toLowerCase()
+        Station.findOne({ where: { lowerCaseName: data } })
             .then((response) => {
-                console.log(response.dataValues.mtrShort)
                 var stationAbr = response.dataValues.mtrShort.toLowerCase()
                 var links = 'http://www.mtr.com.hk/archive/ch/services/maps/' + stationAbr + '.pdf'
                 let replyMarkup = bot.inlineKeyboard([[bot.inlineButton('maps here!', { url: links })]])
@@ -208,7 +210,7 @@ bot.on('/showStations', msg => {
                 buttons.push(button)
             }
             let replyMarkup = bot.inlineKeyboard(buttons)
-            return bot.sendMessage(msg.from.id, 'Onboard from?', { replyMarkup });
+            return bot.sendMessage(msg.from.id, 'These are all the lines:', { replyMarkup });
         })
         .catch((err) => {
             console.log(err)
@@ -271,7 +273,7 @@ bot.on(/^\/to (.+)$/, (msg, props) => {
             axios.get('https://maps.googleapis.com/maps/api/directions/json?origin=' +
                 fromStation + '&destination=' + toStation + '&mode=transit&key=' + mapsToken)
                 .then((response) => {
-                    console.log(response.data.routes)
+                    console.log(response.data)
                     var time = response.data.routes[0].legs[0].duration.text
                     let replyMarkup = bot.keyboard([
                         [BUTTONS.map.label], [BUTTONS.restart.label]
@@ -334,7 +336,7 @@ bot.on('callbackQuery', msg => {
                         }
                     }
                     var replyMarkup = bot.keyboard(keys)
-                    bot.sendMessage(msg.from.id, 'First callback', { replyMarkup });
+                    bot.sendMessage(msg.from.id, 'nice!', { replyMarkup });
                     return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
                 })
                 .catch((err) => {
