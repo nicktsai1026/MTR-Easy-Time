@@ -17,7 +17,9 @@ const Redis = require('./redis');
 //const port = process.env.PORT || 8080;
 
 app.use(session({
-    secret: 'supersecret'
+    secret: 'supersecret',
+    resave: true,
+    saveUninitialized: true
 }));
 app.use(bodyParser.urlencoded({extended:true }));
 app.engine('handlebars', hb({defaultLayout: 'main'}));

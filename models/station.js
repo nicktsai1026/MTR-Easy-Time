@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
     chinese: DataTypes.STRING,
     english: DataTypes.STRING,
     mtrId:DataTypes.INTEGER,
-    mtrShort:DataTypes.STRING
+    mtrShort:DataTypes.STRING,
+    lowerCaseName:DataTypes.STRING
   });
   station.associate =  function(models) {
       station.hasMany(models.line_station,{targetKey:"stationId"});
