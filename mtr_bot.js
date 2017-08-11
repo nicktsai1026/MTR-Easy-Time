@@ -308,14 +308,14 @@ bot.on('callbackQuery', msg => {
                     },
                 })
                     .then((items) => {
-                        console.log(items)
-                        console.log(items.dataValues)
-                        console.log(items.dataValues.stationName)
-                        var departure = items.dataValues.stationName
+                        // console.log(items)
+                        // console.log(items.dataValues)
+                        // console.log(items.dataValues.stationName)
+                        // var departure = items.dataValues.stationName
                         console.log('it works!')
                         var arrFav = [];
                         items.forEach((val) => {
-                            arrFav.push('/from ' + val.dataValues);
+                            arrFav.push(val.dataValues);
                         });
                         var keys = []
                         for (var i = 0; i < arrFav.length; i++) {
