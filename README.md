@@ -32,12 +32,17 @@ In hope of providing an easy and convenient option for getting MTR information, 
 
 # Possible upgrade
 1. To provide information of
+
   a. Time of the last trains to get on in order to get to destination
+  
   b. Fee
+  
   c. Specific routes (where to change train)
+  
   d. Show closest exits according to landmarks
 
 # Authors
-Corah Chiu, Nick Tsai, Morris Wong
+Corah Chiu (@corahchiu), Nick Tsai (@nicktsai1026), Morris Wong (@morriswong)
 
 # Credits
+Thank you Gordon Lau (@gordonlau) and Thilo Roth (@thiloo) for your infinite support and help with our project.
