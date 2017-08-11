@@ -319,7 +319,7 @@ bot.on('callbackQuery', msg => {
                         });
                         var keys = []
                         for (var i = 0; i < arrFav.length; i++) {
-                            keys.push(['/from ' + stations[i]])
+                            keys.push(['/from ' + arrFav[i]])
                         }
                         return bot.sendMessage(msg.from.id, 'nice!', { replyMarkup });
                     })
