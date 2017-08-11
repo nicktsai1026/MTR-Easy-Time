@@ -307,7 +307,8 @@ bot.on('callbackQuery', msg => {
                         facebookId: fbId
                     },
                 })
-                    .then(() => {
+                    .then((items) => {
+                        console.log(items)
                         console.log('it works!')
                     })
             })
