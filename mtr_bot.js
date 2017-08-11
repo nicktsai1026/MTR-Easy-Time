@@ -363,12 +363,13 @@ bot.on('callbackQuery', msg => {
                         allArr.forEach(function (val) {
                             allStations.push(val.dataValues.english)
                         })
+                        // console.log(allStations)
                         var keys = []
                         for (var i = 0; i < allStations.length; i++) {
                             if (toCheck) {
-                                keys.push(['/to ' + stations[i]])
+                                keys.push(['/to ' + allStations[i]])
                             } else {
-                                keys.push(['/from ' + stations[i]])
+                                keys.push(['/from ' + allStations[i]])
                             }
                         }
                         var replyMarkup = bot.keyboard(keys)
