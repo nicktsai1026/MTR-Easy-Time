@@ -221,9 +221,5 @@ module.exports = (express) => {
       function(req, res) {
         res.redirect('/home');
       });
-    router.get('/home', function (req, res){
-        res.redirect('/home/chinese');
-    })
-
     return router;
 };

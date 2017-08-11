@@ -11,19 +11,19 @@ const Line_station = models.line_station;
 const User = models.user;
 const Favor = models.favor;
 const selector = require('./selector');
-const setupPassport = require('./passport');
+// const setupPassport = require('./passport');
 const router = require('./router')(express);
 const Redis = require('./redis');
 //const port = process.env.PORT || 8080;
 
-app.use(session({
-    secret: 'supersecret'
-}));
+// app.use(session({
+//     secret: 'supersecret'
+// }));
 app.use(bodyParser.urlencoded({extended:true }));
 app.engine('handlebars', hb({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
-setupPassport(app);
+// setupPassport(app);
 app.use('/', router);
 
 app.get('/stylesheet.css', function(req, res){
@@ -37,20 +37,23 @@ app.get('/login', function(req,res){
     })
 })
 
-app.get('/home', function(req,res){
+app.get('/home/:language', function(req,res){
     //console.log(req.user.dataValues.facebookId);
     selector.listStations()
         .then((lines) => {
-            var fbPersonalInfo = [];
-            Redis.get(req.user.dataValues.facebookId,function(err,data){
-                if(err){
-                    return console.log(err);
-                }
-                console.log(data);
-                fbPersonalInfo.push(JSON.parse(data));
-            });
-            lines.fbInfo = fbPersonalInfo;
+            // var fbPersonalInfo = [];
+            // Redis.get(req.user.dataValues.facebookId,function(err,data){
+            //     if(err){
+            //         return console.log(err);
+            //     }
+            //     console.log(data);
+            //     fbPersonalInfo.push(JSON.parse(data));
+            // });
+            // lines.fbInfo = fbPersonalInfo;
             res.render('display', lines);
+        })
+        .catch((err)=>{
+            console.log(err);
         })
 })
 
@@ -69,14 +72,14 @@ app.get('/line/:id', function(req,res){
             })
             .then((stations) => {
                 //console.log(req.session.passport.user);
-                var fbPersonalInfo = [];
-                Redis.get(req.session.passport.user,function(err,data){
-                    if(err){
-                        return console.log(err);
-                    }
-                    fbPersonalInfo.push(JSON.parse(data));
-                });
-                lines.fbInfo = fbPersonalInfo;
+                // var fbPersonalInfo = [];
+                // Redis.get(req.session.passport.user,function(err,data){
+                //     if(err){
+                //         return console.log(err);
+                //     }
+                //     fbPersonalInfo.push(JSON.parse(data));
+                // });
+                // lines.fbInfo = fbPersonalInfo;
                 var arrStation = [];
                 function compare(a,b) {
                   if (a.dataValues.sequel < b.dataValues.sequel)
