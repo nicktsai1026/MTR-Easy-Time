@@ -1,9 +1,14 @@
 # MTR Easy Time
-### - Telegram chatbot providing travel time between MTR stations in Hong Kong
+### - Telegram chatbot for getting Hong Kong MTR information
 Telegram: @Mtr_time_bot
 
 # Concept
-To provide easy access of some MTR information by integrating the solution in Telegram as an extension
+In hope of providing an easy and convenient option for getting MTR information, we have the idea of creating an extension within the messenger Telegram for providing such information. This is our prototype.
+
+# Current information and service provided in app
+1. Travel time between stations
+2. Maps of destination stations
+3. Bookmarking of favourite stations for easy access in the future
 
 # How to use
 1. Open bot on Telegram (@Mtr_time_bot)
@@ -26,10 +31,11 @@ To provide easy access of some MTR information by integrating the solution in Te
 1. sequelize
 
 # Possible upgrade
-1. Time of the last trains to get on in order to get to destination
-2. Fee
-3. Specific routes (where to change train)
-4. Show closest exits according to landmark
+1. To provide information of
+  a. Time of the last trains to get on in order to get to destination
+  b. Fee
+  c. Specific routes (where to change train)
+  d. Show closest exits according to landmarks
 
 # Authors
 Corah Chiu, Nick Tsai, Morris Wong
