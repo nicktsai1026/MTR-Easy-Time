@@ -296,7 +296,7 @@ bot.on('callbackQuery', msg => {
     if (msg.data = 'fav') {
         User.findOne({
             where: {
-                telegramId: msg.from.id
+                telegramId: msg.from.id.toString()
             }
         })
             .then((user) => {
