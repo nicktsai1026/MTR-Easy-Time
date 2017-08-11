@@ -11,7 +11,7 @@ module.exports = (app) => {
     passport.use('facebook', new facebookStrategy({
         clientID: '109100156427112',
         clientSecret: '6fcf61cd163db93babd249db426d73d9',
-        callbackURL: 'https://c4b03229.ngrok.io/auth/facebook/callback',
+        callbackURL: 'https://f9c6adb7.ngrok.io/auth/facebook/callback',
         profileFields: ['id', 'displayName', 'photos', 'email']
     },
         function (accessToken, refreshToken, profile, cb) {

@@ -38,7 +38,7 @@ body {
 }
 
 #line1, .lineStation1, .addFavorbtn1 {
-    background: #119931;
+    background: linear-gradient(to bottom, #119931, #0b820d);
     border: solid #38c26f 4px;
 }
 
@@ -47,41 +47,26 @@ body {
 }
 
 #line2, .lineStation2, .addFavorbtn1 {
-  background: #ff0000;
-  background-image: -webkit-linear-gradient(top, #ff0000, #b82b2b);
-  background-image: -moz-linear-gradient(top, #ff0000, #b82b2b);
-  background-image: -ms-linear-gradient(top, #ff0000, #b82b2b);
-  background-image: -o-linear-gradient(top, #ff0000, #b82b2b);
-  background-image: linear-gradient(to bottom, #ff0000, #b82b2b);
+  background: linear-gradient(to bottom, #ff0000, #b82b2b);
   border: solid #f07878 4px;
 }
 
 #line2:hover, .lineStation2:hover {
-  background: #ff3333;
+  background: #ff3030;
 }
 
 #line3, .lineStation3 {
-  background: #0076c4;
-  background-image: -webkit-linear-gradient(top, #0076c4, #2980b9);
-  background-image: -moz-linear-gradient(top, #0076c4, #2980b9);
-  background-image: -ms-linear-gradient(top, #0076c4, #2980b9);
-  background-image: -o-linear-gradient(top, #0076c4, #2980b9);
-  background-image: linear-gradient(to bottom, #0076c4, #2980b9);
+  background: linear-gradient(to bottom, #0076c4, #015b96);
   border: solid #87c3e6 4px;
 }
 
 #line3:hover, .lineStation3:hover {
-  background: #14a5ff;
-  background-image: -webkit-linear-gradient(top, #14a5ff, #3498db);
-  background-image: -moz-linear-gradient(top, #14a5ff, #3498db);
-  background-image: -ms-linear-gradient(top, #14a5ff, #3498db);
-  background-image: -o-linear-gradient(top, #14a5ff, #3498db);
-  background-image: linear-gradient(to bottom, #14a5ff, #3498db);
+  background: #9acfee;
 }
 
 #line4, .lineStation4 {
-  background: #65cc56;
-  border: solid #8ae695 4px;
+  background: linear-gradient(to bottom, #65cc56, #2ac216);
+  border: solid #63de72 4px;
 }
 
 #line4:hover, .lineStation4:hover {
@@ -89,7 +74,7 @@ body {
 }
 
 #line5, .lineStation5 {
-  background: #b51aab;
+  background: linear-gradient(to bottom, #b51aab, #962d98);
   border: solid #c558db 4px;
 }
 
@@ -98,7 +83,7 @@ body {
 }
 
 #line6, .lineStation6 {
-  background: #e69200;
+  background: linear-gradient(to bottom, #e69200, #b17000);
   border: solid #ffb575 4px;
 }
 
@@ -107,7 +92,7 @@ body {
 }
 
 #line7, .lineStation7 {
-  background: #008277;
+  background: linear-gradient(to bottom, #008277, #025951);
   border: solid #069e8a 4px;
 }
 
@@ -116,7 +101,7 @@ body {
 }
 
 #line8, .lineStation8 {
-  background: #52e4fa;
+  background: linear-gradient(to bottom, #52e4fa, #22bfbe);
   border: solid #9ef0ff 4px;
 }
 
@@ -125,7 +110,7 @@ body {
 }
 
 #line9, .lineStation9 {
-  background: #b35c00;
+  background: linear-gradient(to bottom, #b35c00, #9d4e00);
   border: solid #c98754 4px;
 }
 
@@ -134,12 +119,12 @@ body {
 }
 
 #line10, .lineStation10 {
-  background: #730065;
-  border: solid #a3418b 4px;
+  background: linear-gradient(to bottom, #730065, #5b004c);
+  border: solid #91367b 4px;
 }
 
 #line10:hover, .lineStation10:hover {
-  background: #bd0d94;
+  background: #7f0070;
 }
 
 .showFavor {
