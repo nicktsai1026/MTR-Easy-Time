@@ -27,7 +27,7 @@
     <a href="/line/{{id}}/english"><button id='line{{id}}' class="col-md-5 col-sm-5 col-xs-5 line" type="button" name="button">{{english}}</button></a>
     {{/show}}
     {{else}}
-    <a href="#showAll"><h2>Lines</h2></a>
+    <a href="#showAll"><h2>地鐵綫</h2></a>
     {{#show}}
     <a href="/line/{{id}}/chinese"><button id='line{{id}}' class="col-md-5 col-sm-5 col-xs-5 line" type="button" name="button">{{chinese}}</button></a>
     {{/show}}
@@ -41,7 +41,7 @@
         <a href="#addFavor"><button id="station-{{id}}" class="col-md-5 col-sm-5 col-xs-5 lineStation{{cssId}} station" type="button" name="button">{{english}}</button></a>
     {{/list}}
     {{else}}
-    <a href="#addFavor"><h2 id="showAll">Stations</h2></a>
+    <a href="#addFavor"><h2 id="showAll">地鐵站</h2></a>
     {{#list}}
         <a href="#addFavor"><button id="station-{{id}}" class="col-md-5 col-sm-5 col-xs-5 lineStation{{cssId}} station" type="button" name="button">{{chinese}}</button></a>
     {{/list}}

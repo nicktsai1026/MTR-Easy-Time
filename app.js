@@ -59,6 +59,9 @@ app.get('/home/:language', function(req,res){
             lines.fbInfo = fbPersonalInfo;
             res.render('display', lines);
         })
+        .catch((err)=>{
+            console.log(err);
+        })
 })
 
 app.get('/line/:id/:language', function(req,res){
