@@ -12,10 +12,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       remark: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
+        unique:true
       },
-      stationId: {
-        type: Sequelize.INTEGER
+      stationName: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -24,6 +27,9 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      userId: {
+        type: Sequelize.INTEGER
       }
     });
   },

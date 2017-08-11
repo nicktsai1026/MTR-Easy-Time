@@ -4,29 +4,26 @@ const models = require('./models');
 const Line = models.line;
 const Station = models.station;
 const Line_station = models.line_station;
+const User = models.user;
+const Favor = models.favor;
 const mapsToken = 'AIzaSyBoFN8cy4YjlKB8EF6mccM6Re4DOzzMn04'
-
-var redis = require('redis');
-var client = redis.createClient({
-    host: 'localhost',
-    port: 6379
-});
-
-client.on('error', function (err) {
-    console.log(err);
-});
+const Redis = require('./redis');
 
 const BUTTONS = {
     home: {
-        label: '🏠 Home',
+        label: '🚀 Go!',
         command: '/start'
+    },
+    restart: {
+        label: '🔙 Start again',
+        command: '/restart'
     },
     types: {
         label: '🚇 Quick Check',
         command: '/check'
     },
     lines: {
-        label: '🚉 Show lines',
+        label: '🚉  All lines',
         command: '/showStations'
     },
     map: {
@@ -34,13 +31,13 @@ const BUTTONS = {
         command: '/map'
     },
     hide: {
-        label: '⌨️ Hide keyboard',
-        command: '/hide'
+        label: '⌨️ Favourite',
+        command: '/fav'
     }
 };
 
 const bot = new TeleBot({
-    token: '412251435:AAGYnnnmx0wbNpv_4zRM0p-7wv3cGMCmpRU',
+    token: '412251435:AAEgB88l9MVtKDGYEtfyiaqO3m-dK9E-AEU',
     usePlugins: ['namedButtons'],
     pluginConfig: {
         namedButtons: {
@@ -50,62 +47,138 @@ const bot = new TeleBot({
 });
 
 // On commands
-bot.on(['/start', '/back'], msg => {
+bot.on(['/start'], msg => {
+    User.findOne({where:{telegramId:msg.chat.id.toString()}})
+        .then((user)=>{
+            if(!user){
+                User.create({telegramId:msg.chat.id});
+            }
+        })
     let replyMarkup = bot.keyboard([
         [BUTTONS.home.label],
         [BUTTONS.lines.label, BUTTONS.types.label],
         [BUTTONS.hide.label]
     ], { resize: true });
-    return bot.sendMessage(msg.from.id, 'Keyboard example.', { replyMarkup });
-
+    bot.sendMessage(msg.from.id, 'Welcome! Checking the time it takes' +
+        ' for an MTR ride has never been so easy!')
+        .then(() => {
+            bot.sendMessage(msg.from.id, 'Press |🚇 Quick Check| to type out the departure' +
+                ' and destination station.')
+                .then(() => {
+                    bot.sendMessage(msg.from.id, 'Or just press |🚉  All lines| and tap your' +
+                        ' way to see the time it takes.')
+                        .then(() => {
+                            return bot.sendMessage(msg.from.id, 'Enjoy! 😇', { replyMarkup })
+                        })
+                })
+        })
 });
 
+bot.on(['/restart'], msg => {
+    let replyMarkup = bot.keyboard([
+        [BUTTONS.home.label],
+        [BUTTONS.lines.label, BUTTONS.types.label],
+        [BUTTONS.hide.label]
+    ], { resize: true });
+    bot.sendMessage(msg.from.id, 'Just pick a mode and let me do the rest 💪🏼 ', { replyMarkup })
+})
+
 // Hide keyboard
-bot.on('/hide', msg => {
+bot.on('/fav', msg => {
+    Redis.set('telegram', msg.chat.id, function (err, data) {
+        if (err) return console.log(err);
+    });
+    let replyMarkup = bot.inlineKeyboard([
+        [bot.inlineButton('Add favourite', { url: 'https://c4b03229.ngrok.io/login' }),
+        bot.inlineButton('Get favourite', { url: 'http://www.mtr.com.hk/en/customer/services/service_hours_search.php?query_type=search&station=39' })]
+    ])
     return bot.sendMessage(
-        msg.from.id, 'Hide keyboard example. Type /back to show.', { replyMarkup: 'hide' }
+        msg.from.id, 'Manage your favourites here:', { replyMarkup }
     );
 });
 
-bot.on('text', msg => {
-    console.log('Run first text')
-    fromStation = msg.text;
-    bot.sendMessage(msg.from.id, `First reply ${fromStation}`);
-    bot.on('text', msg => {
-        console.log('Run second text')
-        toStation = msg.text;
-        return bot.sendMessage(msg.from.id, `Second reply ${toStation}`);
-    });
+const stationList = {};
+bot.on('*', (msg, props) => {
+    const id = msg.chat.id;
+    const ask = stationList[id];
+    if (!ask) return;
+    delete stationList[id];
+    bot.event('ask.' + ask, msg, props);
+});
+
+bot.on('sendMessage', (args) => {
+    const id = args[0];
+    const opt = args[2] || {};
+    const ask = opt.ask;
+    if (ask) stationList[id] = ask;
 });
 
 bot.on('/check', msg => {
-    var fromStation = ''
-    // 'Wan Chai' + ' Station, Hong Kong'
-    var toStation = ''
-    // 'Mong Kok' + ' Station, Hong Kong'
-    // axios.get('https://maps.googleapis.com/maps/api/directions/json?origin=' +
-    //     fromStation + '&destination=' + toStation + '&mode=transit&key=' + mapsToken)
-    //     .then((response) => {
-    //         console.log(response.data.routes[0].legs[0].duration.text)
-    //         var time = response.data.routes[0].legs[0].duration.text
-    //         let replyMarkup = bot.keyboard([[BUTTONS.home.label, BUTTONS.map.label]], { resize: true })
-    //         bot.sendMessage(msg.from.id, `You said: ${text}`);
-    //         bot.sendMessage(msg.from.id, 'From ' + fromStation +
-    //             ' to ' + toStation + '\nEstimated time: ' + time);
-    //         return bot.sendMessage(msg.from.id, 'There you go!', { replyMarkup });
-    //     })
-    //     .catch((err) => {
-    //         console.log(err)
-    //     })
+    return bot.sendMessage(msg.from.id, 'Tell us!', { ask: 'handleEmoji' })
 })
 
+bot.on('ask.handleEmoji', msg => {
+    const departure = msg.text;
+    return bot.sendMessage(msg.from.id, `Where are you now?`, { ask: 'departure' });
+});
+
+bot.on('ask.departure', msg => {
+    const departure = msg.text;
+    // Station.findOne({ where: { id: val.dataValues.stationId } })
+    console.log(departure)
+    Redis.set('from', departure, function (err, data) {
+        if (err) return console.log(err);
+    })
+    return bot.sendMessage(msg.from.id, `Okay, ${departure} it is. Then where are you going?`, { ask: 'destination' });
+});
+
+bot.on('ask.destination', msg => {
+    var fromStation = ''
+    var toStation = ''
+    const destination = msg.text;
+
+    Redis.set('to', destination, function (err, data) {
+        if (err) return console.log(err);
+        console.log(data)
+    })
+    bot.sendMessage(msg.from.id, `You are going to ${destination}. Alright!`);
+
+    Redis.get('from', function (err, data) {
+        if (err) return console.log(err);
+        console.log("The depart station is " + data)
+        fromStation = data + ' Station, Hong Kong'
+
+        Redis.get('to', function (err, data) {
+            if (err) return console.log(err);
+            console.log("The destination station is " + data)
+            toStation = data + ' Station, Hong Kong'
+
+            axios.get('https://maps.googleapis.com/maps/api/directions/json?origin=' +
+                fromStation + '&destination=' + toStation + '&mode=transit&key=' + mapsToken)
+                .then((response) => {
+                    console.log(response.data.routes[0].legs[0].duration.text)
+                    var time = response.data.routes[0].legs[0].duration.text
+                    let replyMarkup = bot.keyboard([
+                        [BUTTONS.map.label], [BUTTONS.restart.label]
+                    ], { resize: true })
+                    bot.sendMessage(msg.from.id, 'There you go!', { replyMarkup });
+                    return bot.sendMessage(msg.from.id, 'From ' + fromStation +
+                        ' to ' + toStation + '\nEstimated time: ' + time);
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        })
+    });
+});
+
 bot.on('/map', msg => {
-    client.get('to', function (err, data) {
+    Redis.get('to', function (err, data) {
         if (err) return console.log(err);
         console.log("Getting the map of " + data)
-        Station.findOne({ where: { english: data } })
+        var data = data.toLowerCase()
+        Station.findOne({ where: { lowerCaseName: data } })
             .then((response) => {
-                console.log(response.dataValues.mtrShort)
                 var stationAbr = response.dataValues.mtrShort.toLowerCase()
                 var links = 'http://www.mtr.com.hk/archive/ch/services/maps/' + stationAbr + '.pdf'
                 let replyMarkup = bot.inlineKeyboard([[bot.inlineButton('maps here!', { url: links })]])
@@ -126,7 +199,7 @@ bot.on('/showStations', msg => {
                 allLines[abr].push(val.dataValues.chinese);
                 allLines[abr].push(val.dataValues.english);
             });
-            let replyMarkup = bot.keyboard([[BUTTONS.home.label]], { resize: true })
+            let replyMarkup = bot.keyboard([[BUTTONS.restart.label]], { resize: true })
             bot.sendMessage(msg.from.id, 'Okay, first pick wher you are coming from', { replyMarkup });
         }).then(() => {
             for (var abr in allLines) {
@@ -134,9 +207,8 @@ bot.on('/showStations', msg => {
                 console.log(button)
                 buttons.push(button)
             }
-            console.log(buttons)
             let replyMarkup = bot.inlineKeyboard(buttons)
-            return bot.sendMessage(msg.from.id, 'Onboard from?', { replyMarkup });
+            return bot.sendMessage(msg.from.id, 'These are all the lines:', { replyMarkup });
         })
         .catch((err) => {
             console.log(err)
@@ -145,11 +217,10 @@ bot.on('/showStations', msg => {
 
 bot.on(/^\/from (.+)$/, (msg, props) => {
     const text = props.match[1];
-    console.log(msg)
     var departure = msg.text
     var re = /(\/)(from)( )/
     departure = departure.replace(re, '')
-    client.set('from', departure, function (err, data) {
+    Redis.set('from', departure, function (err, data) {
         if (err) return console.log(err);
     })
     var allLines = {}
@@ -162,7 +233,7 @@ bot.on(/^\/from (.+)$/, (msg, props) => {
                 allLines[abr].push(val.dataValues.chinese);
                 allLines[abr].push(val.dataValues.english);
             });
-            let replyMarkup = bot.keyboard([[BUTTONS.home.label]], { resize: true })
+            let replyMarkup = bot.keyboard([[BUTTONS.restart.label]], { resize: true })
             bot.sendMessage(msg.from.id, 'Okay got it!', { replyMarkup });
         })
         .then(() => {
@@ -170,7 +241,6 @@ bot.on(/^\/from (.+)$/, (msg, props) => {
                 var button = [bot.inlineButton('' + allLines[abr][1], { callback: abr + 't' })]
                 buttons.push(button)
             }
-            console.log(buttons)
             let replyMarkup = bot.inlineKeyboard(buttons)
             return bot.sendMessage(msg.from.id, 'And you are going to?', { replyMarkup });
         })
@@ -187,23 +257,25 @@ bot.on(/^\/to (.+)$/, (msg, props) => {
     var fromStation = ''
     var toStation = ''
     var promiseArr = []
-    client.set('to', destination, function (err, data) {
+    Redis.set('to', destination, function (err, data) {
         if (err) return console.log(err);
     })
-    client.get('from', function (err, data) {
+    Redis.get('from', function (err, data) {
         if (err) return console.log(err);
         console.log("The depart station is " + data)
         fromStation = data + ' Station, Hong Kong'
-        client.get('to', function (err, data) {
+        Redis.get('to', function (err, data) {
             if (err) return console.log(err);
             console.log("The destination station is " + data)
             toStation = data + ' Station, Hong Kong'
             axios.get('https://maps.googleapis.com/maps/api/directions/json?origin=' +
                 fromStation + '&destination=' + toStation + '&mode=transit&key=' + mapsToken)
                 .then((response) => {
-                    console.log(response.data.routes[0].legs[0].duration.text)
+                    console.log(response.data)
                     var time = response.data.routes[0].legs[0].duration.text
-                    let replyMarkup = bot.keyboard([[BUTTONS.home.label, BUTTONS.map.label]], { resize: true })
+                    let replyMarkup = bot.keyboard([
+                        [BUTTONS.map.label], [BUTTONS.restart.label]
+                    ], { resize: true })
                     bot.sendMessage(msg.from.id, 'There you go!', { replyMarkup });
                     return bot.sendMessage(msg.from.id, 'From ' + fromStation +
                         ' to ' + toStation + '\nEstimated time: ' + time);
@@ -243,7 +315,6 @@ bot.on('callbackQuery', msg => {
             }
             stations.sort(compare);
             stations.forEach((val) => {
-                console.log(val.dataValues.sequel)
                 getStations.push(
                     Station.findOne({ where: { id: val.dataValues.stationId } })
                 )
@@ -253,7 +324,6 @@ bot.on('callbackQuery', msg => {
                     allArr.forEach(function (val) {
                         allStations.push(val.dataValues.english)
                     })
-                    console.log(allStations)
                     var stations = allStations
                     var keys = []
                     for (var i = 0; i < stations.length; i++) {
@@ -264,7 +334,7 @@ bot.on('callbackQuery', msg => {
                         }
                     }
                     var replyMarkup = bot.keyboard(keys)
-                    bot.sendMessage(msg.from.id, 'First callback', { replyMarkup });
+                    bot.sendMessage(msg.from.id, 'nice!', { replyMarkup });
                     return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
                 })
                 .catch((err) => {

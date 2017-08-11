@@ -11,35 +11,46 @@ module.exports = (app) => {
     passport.use('facebook', new facebookStrategy({
         clientID: '109100156427112',
         clientSecret: '6fcf61cd163db93babd249db426d73d9',
-        callbackURL: 'https://2a6921d9.ngrok.io/auth/facebook/callback',
-        profileFields:['id','displayName','photos','email']
-        },
-        function(accessToken, refreshToken, profile, cb) {
-            User.findOrCreate({where:{ facebookId: profile.id }})
-                .then(function(user){
-                    // console.log(accessToken);
-                    // console.log(profile);
+        callbackURL: 'https://c4b03229.ngrok.io/auth/facebook/callback',
+        profileFields: ['id', 'displayName', 'photos', 'email']
+    },
+        function (accessToken, refreshToken, profile, cb) {
+                var teleId;
+                Redis.get('telegram', function (err, data) {
+                    if (err) return console.log(err);
+                    teleId = JSON.parse(data)
+                User.update(
+                    {
+                        facebookId:profile.id
+                    },
+                    {
+                        where: { telegramId: teleId.toString() }
+                    }
+                )
+                .then((user)=>{
                     var fbInfoObj = {
-                        access_token:accessToken,
-                        fbId:profile.id,
-                        fbName:profile.displayName,
-                        fbPhoto:profile.photos[0].value
+                        access_token: accessToken,
+                        fbId: profile.id,
+                        fbName: profile.displayName,
+                        fbPhoto: profile.photos[0].value,
+                        telegramId:teleId
                     };
-                    Redis.set(profile.id,JSON.stringify(fbInfoObj),function(err,data){
-                        if(err){
+                    Redis.set(profile.id, JSON.stringify(fbInfoObj), function (err, data) {
+                        if (err) {
                             return console.log(err);
                         }
                     });
-                    return cb(null,user);
+                    return cb(null, fbInfoObj);
                 })
                 .catch((err)=>{
-                    return cb(err);
-                });
+                    console.log(err);
+                })
+            })
         }
     ));
 
     passport.serializeUser((user, done) => {
-        done(null, user[0].facebookId);
+        done(null, user.fbId);
     });
 
     passport.deserializeUser((id, done) => {

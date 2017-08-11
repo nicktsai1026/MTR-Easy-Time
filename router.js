@@ -55,11 +55,11 @@ const lines_abbreviation = {
 module.exports = (express) => {
     const router = express.Router();
 
-    router.get('/public/stylesheet.css', function(req,res){
+    router.get('/public/stylesheet.css', function (req, res) {
         res.sendFile(__dirname + '/public/stylesheet.css');
     });
 
-    router.get('/',function(req, res){
+    router.get('/', function (req, res) {
         res.render('createLine');
     });
 
@@ -140,9 +140,6 @@ module.exports = (express) => {
     });
 
     router.get('/getRelation', function (req, res) {
-        // Line.findOne({where:{id:1}})
-        //     .then((line)=>{
-        //         console.log(line);
         Line_station.findAll({
             where: {
                 lineId: 1
@@ -169,7 +166,6 @@ module.exports = (express) => {
             .catch((err) => {
                 console.log(err);
             })
-        // })
     });
 
     router.post('/addmtrId', function (req, res) {
@@ -186,6 +182,24 @@ module.exports = (express) => {
             );
         };
         res.redirect('/addmtrId');
+    });
+
+    router.post('/addLowerCase', function (req, res) {
+        // console.log(Object.keys(mtrInfo));
+        var allStations = Object.keys(mtrInfo)
+        allStations.forEach(function (val) {
+            var lower = val.toLowerCase()
+            console.log(lower)
+            Station.update(
+                {
+                    lowerCaseName: lower
+                },
+                {
+                    where: { english: val }
+                }
+            );
+        });
+        res.redirect('/login');
     });
 
     router.get('/addmtrId', function (req, res) {
@@ -209,17 +223,18 @@ module.exports = (express) => {
         res.redirect('/login');
     });
 
-    // router.get('/login', function (req, res) {
-    //     res.render('login');
-    // });
-
     router.get('/auth/facebook',
-      passport.authenticate('facebook'));
+        passport.authenticate('facebook'));
 
     router.get('/auth/facebook/callback',
-      passport.authenticate('facebook', { failureRedirect: '/login' }),
-      function(req, res) {
-        res.redirect('/home');
-      });
+        passport.authenticate('facebook', { failureRedirect: '/login' }),
+        function (req, res) {
+            res.redirect('/home');
+        });
+
+    router.get('/home', function (req, res) {
+        res.redirect('/home/chinese');
+    })
+
     return router;
 };

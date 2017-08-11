@@ -1,6 +1,17 @@
-<div>
+<style>
+    .fb{
+        text-align: center;
+        padding-top: 20px;
+    }
+    h4 {
+        margin-bottom: 0px;
+        padding-bottom: 5px;
+        font-family: 'Cardo', serif;
+    }
+</style>
+<div class="fb">
     {{#fbInfo}}
-    <h2>{{fbName}}</h2>
     <img src="{{fbPhoto}}" alt="personal photo">
+    <h4>Hello!! {{fbName}}</h4>
     {{/fbInfo}}
 </div>
