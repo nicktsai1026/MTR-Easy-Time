@@ -89,7 +89,7 @@ bot.on('/fav', msg => {
         if (err) return console.log(err);
     });
     let replyMarkup = bot.inlineKeyboard([
-        [bot.inlineButton('Add favourite', { url: 'http://10.107.106.242:8080/login' }),
+        [bot.inlineButton('Add favourite', { url: 'http://174.138.24.195/login' }),
         bot.inlineButton('Get favourite', { callback: 'fav' })]
     ])
     return bot.sendMessage(
