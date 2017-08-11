@@ -1,5 +1,5 @@
 # MTR Easy Time
-### - Telegram chatbot for getting Hong Kong MTR information
+### Telegram chatbot for getting Hong Kong MTR information
 Telegram: @Mtr_time_bot
 
 # Concept
