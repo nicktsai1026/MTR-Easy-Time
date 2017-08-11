@@ -59,6 +59,9 @@ app.get('/home/:language', function(req,res){
             lines.fbInfo = fbPersonalInfo;
             res.render('display', lines);
         })
+        .catch((err)=>{
+            console.log(err);
+        })
 })
 
 app.get('/line/:id/:language', function(req,res){
@@ -117,7 +120,7 @@ app.post('/addFavoriteStation',function(req, res){
     // console.log(req.body);
     Favor.findOne({where:{remark:req.body.remark}})
         .then((favor)=>{
-            console.log(favor);
+            //console.log(favor);
             if(!favor){
                 const favor = new Favor();
                 Favor.create({

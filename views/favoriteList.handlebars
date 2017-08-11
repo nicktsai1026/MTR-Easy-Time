@@ -1,16 +1,44 @@
 <style>
-    .returnbtn {
+    .returndiv {
         text-align: center;
+    }
+    .bgphoto {
+        text-align: center;
+    }
+
+    h1 {
+        font-family: 'Montserrat', sans-serif;
+        margin: 0px;
+        padding: 20px 0px 20px 0px;
+    }
+
+    .favorStations {
+        border-radius: 30px;
+        border: solid white 2px;
+        height: 250px;
+        background-image:linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url(https://cdn.unwire.hk/wp-content/uploads/2013/06/5.2.2.2.2-mtr_03.jpg);
+    }
+    .showFavorStations {
+        border-radius: 10px;
+        font-family: Arial;
+        font-size: 20px;
+        color: white;
+        margin: 10px;
+        background: black;
+        border: none;
+        padding: 5px;
     }
 </style>
 
-<div class="returnbtn">
-    <a href="/home/:language"><button type="button" name="button">Return</button></a>
+<div class="returndiv">
+    <a href="/home/:language"><button class="returnbtn" type="button" name="button">Return</button></a>
 </div>
 
-<div>
-    {{#showFavorList}}
-    <h1>remark:{{remark}}</h1>
-    <h1>station:{{stationName}}</h1>
-    {{/showFavorList}}
+<div class="bgphoto">
+        {{#showFavorList}}
+        <div class="col-md-4 col-sm-6 col-xs-12 favorStations">
+        <h1>{{remark}}</h1>
+        <button class="col-xs-12 showFavorStations" type="button" name="button">{{stationName}}</button>
+        </div>
+        {{/showFavorList}}
 </div>

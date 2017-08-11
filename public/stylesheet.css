@@ -4,8 +4,6 @@ body {
 }
 
 #engbtn, #chibtn {
-  -webkit-border-radius: 5;
-  -moz-border-radius: 5;
   border-radius: 5px;
   font-family: Arial;
   color: #ffffff;
@@ -25,26 +23,18 @@ body {
   text-decoration: none;
 }
 
-.container h1{
-    width: 100%;
-}
-
-.line, .station, #stationName{
-    -webkit-border-radius: 17;
-    -moz-border-radius: 17;
+.line, .station, #stationName {
     border-radius: 17px;
     font-family: Arial;
+    font-size: 16px;
     color: #ffffff;
-    font-size: 20px;;
-    /*padding: 10px 20px 10px 20px;*/
     text-decoration: none;
-    width: 20px;
-    margin: 2px;
+    height: 50px;
+    margin: 5px;
 }
 
 .line:hover, .station:hover {
     text-decoration: none;
-
 }
 
 #line1, .lineStation1, .addFavorbtn1 {
@@ -154,4 +144,41 @@ body {
 
 .showFavor {
     text-align: center;
+}
+
+.favorbtn,.returnbtn {
+    background: black;
+    color: white;
+    border-radius: 10px;
+    font-family: Arial;
+    border: solid gray 1px;
+    margin-bottom: 5px;
+}
+
+.favorbtn:hover, .returnbtn:hover {
+    background: white;
+    color: black;
+    font-size: 15px;
+}
+
+.remark {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.sub {
+    background: black;
+    color: white;
+    border-radius: 17px;
+    font-family: Arial;
+    border: solid gray 1px;
+    font-size: 16px;
+    height: 50px;
+    margin: 5px;
+}
+
+.sub:hover {
+    background: white;
+    color: black;
+    font-size: 20px;
 }

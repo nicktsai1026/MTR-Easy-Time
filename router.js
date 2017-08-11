@@ -229,11 +229,6 @@ module.exports = (express) => {
     router.get('/auth/facebook/callback',
         passport.authenticate('facebook', { failureRedirect: '/login' }),
         function (req, res) {
-            client.get('from', function (err, data) {
-                if (err) return console.log(err);
-                console.log("The telegram ID is " + data)
-            })
-            console.log('hello')
             res.redirect('/home');
         });
 
