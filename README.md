@@ -1,4 +1,5 @@
-# MTR Easy Time - Telegram chatbot providing travel time between MTR stations in Hong Kong
+# MTR Easy Time
+### Telegram chatbot providing travel time between MTR stations in Hong Kong
 Telegram: @Mtr_time_bot
 
 # Concept
