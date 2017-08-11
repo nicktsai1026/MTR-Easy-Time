@@ -4,6 +4,8 @@ const models = require('./models');
 const Line = models.line;
 const Station = models.station;
 const Line_station = models.line_station;
+const User = models.user;
+const Favor = models.favor;
 const mapsToken = 'AIzaSyBoFN8cy4YjlKB8EF6mccM6Re4DOzzMn04'
 
 var redis = require('redis');
@@ -92,7 +94,7 @@ bot.on('/fav', msg => {
     })
     let replyMarkup = bot.inlineKeyboard([
         [bot.inlineButton('Add favourite', { url: 'http://10.107.106.242:8080/login' }),
-        bot.inlineButton('Get favourite', { url: 'http://www.mtr.com.hk/en/customer/services/service_hours_search.php?query_type=search&station=39' })]
+        bot.inlineButton('Get favourite', { callback: 'fav' })]
     ])
     return bot.sendMessage(
         msg.from.id, 'Manage your favourites here:', { replyMarkup }
@@ -185,6 +187,10 @@ bot.on('/map', msg => {
                 var links = 'http://www.mtr.com.hk/archive/ch/services/maps/' + stationAbr + '.pdf'
                 let replyMarkup = bot.inlineKeyboard([[bot.inlineButton('maps here!', { url: links })]])
                 return bot.sendMessage(msg.from.id, 'Check out the destinations map! ', { replyMarkup });
+            })
+            .catch((err) => {
+                console.log(err)
+                return bot.sendMessage(msg.from.id, 'Sorry! Something has gone wrong! Come back again later!');
             })
     })
 })
@@ -291,58 +297,79 @@ bot.on(/^\/to (.+)$/, (msg, props) => {
 
 // Inline button callback
 bot.on('callbackQuery', msg => {
-    var id = msg.data
-    var re = /[t]$/
-    var toCheck = re.test(id)
-    if (toCheck) id = id.slice(0, -1);
-    Line_station.findAll({
-        where: {
-            lineId: id
-        },
-        include: [{
-            model: Station,
-            required: true
-        }],
-    })
-        .then((stations) => {
-            var allArr = [];
-            var getStations = [];
-            var allStations = []
-            function compare(a, b) {
-                if (a.dataValues.sequel < b.dataValues.sequel)
-                    return -1;
-                if (a.dataValues.sequel > b.dataValues.sequel)
-                    return 1;
-                return 0;
+    if (msg.data = 'fav') {
+        User.findOne({
+            where: {
+                telegramId: msg.from.id
             }
-            stations.sort(compare);
-            stations.forEach((val) => {
-                getStations.push(
-                    Station.findOne({ where: { id: val.dataValues.stationId } })
-                )
-            });
-            Promise.all(getStations)
-                .then((allArr) => {
-                    allArr.forEach(function (val) {
-                        allStations.push(val.dataValues.english)
-                    })
-                    var stations = allStations
-                    var keys = []
-                    for (var i = 0; i < stations.length; i++) {
-                        if (toCheck) {
-                            keys.push(['/to ' + stations[i]])
-                        } else {
-                            keys.push(['/from ' + stations[i]])
-                        }
-                    }
-                    var replyMarkup = bot.keyboard(keys)
-                    bot.sendMessage(msg.from.id, 'nice!', { replyMarkup });
-                    return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
         })
+            .then((user) => {
+                console.log("The second then " + user)
+                var fbId = user.facebookId
+                Favor.findAll({
+                    where: {
+                        facebookId: fbId
+                    },
+                })
+                    .then(() => {
+                        console.log('it works!')
+                    })
+            })
+
+    } else {
+        var id = msg.data
+        var re = /[t]$/
+        var toCheck = re.test(id)
+        if (toCheck) id = id.slice(0, -1);
+        Line_station.findAll({
+            where: {
+                lineId: id
+            },
+            include: [{
+                model: Station,
+                required: true
+            }],
+        })
+            .then((stations) => {
+                var allArr = [];
+                var getStations = [];
+                var allStations = []
+                function compare(a, b) {
+                    if (a.dataValues.sequel < b.dataValues.sequel)
+                        return -1;
+                    if (a.dataValues.sequel > b.dataValues.sequel)
+                        return 1;
+                    return 0;
+                }
+                stations.sort(compare);
+                stations.forEach((val) => {
+                    getStations.push(
+                        Station.findOne({ where: { id: val.dataValues.stationId } })
+                    )
+                });
+                Promise.all(getStations)
+                    .then((allArr) => {
+                        allArr.forEach(function (val) {
+                            allStations.push(val.dataValues.english)
+                        })
+                        var stations = allStations
+                        var keys = []
+                        for (var i = 0; i < stations.length; i++) {
+                            if (toCheck) {
+                                keys.push(['/to ' + stations[i]])
+                            } else {
+                                keys.push(['/from ' + stations[i]])
+                            }
+                        }
+                        var replyMarkup = bot.keyboard(keys)
+                        bot.sendMessage(msg.from.id, 'nice!', { replyMarkup });
+                        return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            })
+    }
 });
 
 bot.start();
