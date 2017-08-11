@@ -4,17 +4,10 @@ const models = require('./models');
 const Line = models.line;
 const Station = models.station;
 const Line_station = models.line_station;
+const User = models.user;
+const Favor = models.favor;
 const mapsToken = 'AIzaSyBoFN8cy4YjlKB8EF6mccM6Re4DOzzMn04'
-
-var redis = require('redis');
-var client = redis.createClient({
-    host: 'localhost',
-    port: 6379
-});
-
-client.on('error', function (err) {
-    console.log(err);
-});
+const Redis = require('./redis');
 
 const BUTTONS = {
     home: {
@@ -55,6 +48,12 @@ const bot = new TeleBot({
 
 // On commands
 bot.on(['/start'], msg => {
+    User.findOne({where:{telegramId:msg.chat.id.toString()}})
+        .then((user)=>{
+            if(!user){
+                User.create({telegramId:msg.chat.id});
+            }
+        })
     let replyMarkup = bot.keyboard([
         [BUTTONS.home.label],
         [BUTTONS.lines.label, BUTTONS.types.label],
@@ -86,12 +85,11 @@ bot.on(['/restart'], msg => {
 
 // Hide keyboard
 bot.on('/fav', msg => {
-    var telegramId = msg.chat.id
-    client.set('telegram', telegramId, function (err, data) {
+    Redis.set('telegram', msg.chat.id, function (err, data) {
         if (err) return console.log(err);
-    })
+    });
     let replyMarkup = bot.inlineKeyboard([
-        [bot.inlineButton('Add favourite', { url: 'http://10.107.106.242:8080/login' }),
+        [bot.inlineButton('Add favourite', { url: 'https://c4b03229.ngrok.io/login' }),
         bot.inlineButton('Get favourite', { url: 'http://www.mtr.com.hk/en/customer/services/service_hours_search.php?query_type=search&station=39' })]
     ])
     return bot.sendMessage(
@@ -128,7 +126,7 @@ bot.on('ask.departure', msg => {
     const departure = msg.text;
     // Station.findOne({ where: { id: val.dataValues.stationId } })
     console.log(departure)
-    client.set('from', departure, function (err, data) {
+    Redis.set('from', departure, function (err, data) {
         if (err) return console.log(err);
     })
     return bot.sendMessage(msg.from.id, `Okay, ${departure} it is. Then where are you going?`, { ask: 'destination' });
@@ -139,18 +137,18 @@ bot.on('ask.destination', msg => {
     var toStation = ''
     const destination = msg.text;
 
-    client.set('to', destination, function (err, data) {
+    Redis.set('to', destination, function (err, data) {
         if (err) return console.log(err);
         console.log(data)
     })
     bot.sendMessage(msg.from.id, `You are going to ${destination}. Alright!`);
 
-    client.get('from', function (err, data) {
+    Redis.get('from', function (err, data) {
         if (err) return console.log(err);
         console.log("The depart station is " + data)
         fromStation = data + ' Station, Hong Kong'
 
-        client.get('to', function (err, data) {
+        Redis.get('to', function (err, data) {
             if (err) return console.log(err);
             console.log("The destination station is " + data)
             toStation = data + ' Station, Hong Kong'
@@ -175,7 +173,7 @@ bot.on('ask.destination', msg => {
 });
 
 bot.on('/map', msg => {
-    client.get('to', function (err, data) {
+    Redis.get('to', function (err, data) {
         if (err) return console.log(err);
         console.log("Getting the map of " + data)
         var data = data.toLowerCase()
@@ -222,7 +220,7 @@ bot.on(/^\/from (.+)$/, (msg, props) => {
     var departure = msg.text
     var re = /(\/)(from)( )/
     departure = departure.replace(re, '')
-    client.set('from', departure, function (err, data) {
+    Redis.set('from', departure, function (err, data) {
         if (err) return console.log(err);
     })
     var allLines = {}
@@ -259,14 +257,14 @@ bot.on(/^\/to (.+)$/, (msg, props) => {
     var fromStation = ''
     var toStation = ''
     var promiseArr = []
-    client.set('to', destination, function (err, data) {
+    Redis.set('to', destination, function (err, data) {
         if (err) return console.log(err);
     })
-    client.get('from', function (err, data) {
+    Redis.get('from', function (err, data) {
         if (err) return console.log(err);
         console.log("The depart station is " + data)
         fromStation = data + ' Station, Hong Kong'
-        client.get('to', function (err, data) {
+        Redis.get('to', function (err, data) {
             if (err) return console.log(err);
             console.log("The destination station is " + data)
             toStation = data + ' Station, Hong Kong'

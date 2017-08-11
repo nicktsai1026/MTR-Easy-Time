@@ -1,3 +1,14 @@
+<style>
+    h2 {
+        font-family: 'Montserrat', sans-serif;
+        margin-bottom: 20px;
+        color: black;
+    }
+    a {
+        /*text-decoration: none !important;*/
+        color: black !important;
+    }
+</style>
 <div class="showFavor">
     <a href="/showFavor"><button class="favorbtn" type="button" name="button">Check my favor</button></a>
 </div>
@@ -11,12 +22,12 @@
 <div class="container" style="height:auto">
     <!-- if the property inEnglish exists -->
     {{#if inEnglish}}
-    <h2>Lines</h2>
+    <a href="#showAll"><h2>Lines</h2></a>
     {{#show}}
     <a href="/line/{{id}}/english"><button id='line{{id}}' class="col-md-5 col-sm-5 col-xs-5 line" type="button" name="button">{{english}}</button></a>
     {{/show}}
     {{else}}
-    <h2>Lines</h2>
+    <a href="#showAll"><h2>Lines</h2></a>
     {{#show}}
     <a href="/line/{{id}}/chinese"><button id='line{{id}}' class="col-md-5 col-sm-5 col-xs-5 line" type="button" name="button">{{chinese}}</button></a>
     {{/show}}
@@ -25,20 +36,20 @@
 
 <div class="container">
     {{#if inEnglish}}
-    <h2>Stations</h2>
+    <a href="#addFavor"><h2 id="showAll">Stations</h2></a>
     {{#list}}
-        <button id="station-{{id}}" class="col-md-5 col-sm-5 col-xs-5 lineStation{{cssId}} station" type="button" name="button">{{english}}</button>
+        <a href="#addFavor"><button id="station-{{id}}" class="col-md-5 col-sm-5 col-xs-5 lineStation{{cssId}} station" type="button" name="button">{{english}}</button></a>
     {{/list}}
     {{else}}
-    <h2>Stations</h2>
+    <a href="#addFavor"><h2 id="showAll">Stations</h2></a>
     {{#list}}
-        <button id="station-{{id}}" class="col-md-5 col-sm-5 col-xs-5 lineStation{{cssId}} station" type="button" name="button">{{chinese}}</button>
+        <a href="#addFavor"><button id="station-{{id}}" class="col-md-5 col-sm-5 col-xs-5 lineStation{{cssId}} station" type="button" name="button">{{chinese}}</button></a>
     {{/list}}
     {{/if}}
 </div>
 
 <div class="container">
-    <h2>Add favourite station</h2>
+    <h2 id="addFavor">Add favourite station</h2>
     <div class="favorForm">
         <form action="/addFavoriteStation" method="post" id="addStation">
             <div class="col-sm-12" style="padding-left: 10px;">
