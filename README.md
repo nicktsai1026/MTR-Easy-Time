@@ -31,13 +31,14 @@ In hope of providing an easy and convenient option for getting MTR information, 
 1. sequelize
 
 # Possible upgrade
-1. To provide information of
-  a. Time of the last trains to get on in order to get to destination
-  b. Fee
-  c. Specific routes (where to change train)
-  d. Show closest exits according to landmarks
+1. To provide information of:
+- Time of the last trains to get on in order to get to destination
+- Fee
+- Specific routes (where to change train)
+- Show closest exits according to landmarks
 
 # Authors
-Corah Chiu, Nick Tsai, Morris Wong
+Corah Chiu (git:corahchiu), Nick Tsai (git:nicktsai1026), Morris Wong (git:morriswong)
 
 # Credits
+Thank you Gordon Lau (git:gordonlau) and Thilo Roth (git:thiloo) for your infinite support and help with our project.
