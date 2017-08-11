@@ -48,10 +48,10 @@ const bot = new TeleBot({
 
 // On commands
 bot.on(['/start'], msg => {
-    User.findOne({where:{telegramId:msg.chat.id.toString()}})
-        .then((user)=>{
-            if(!user){
-                User.create({telegramId:msg.chat.id});
+    User.findOne({ where: { telegramId: msg.chat.id.toString() } })
+        .then((user) => {
+            if (!user) {
+                User.create({ telegramId: msg.chat.id });
             }
         })
     let replyMarkup = bot.keyboard([
@@ -293,7 +293,7 @@ bot.on(/^\/to (.+)$/, (msg, props) => {
 
 // Inline button callback
 bot.on('callbackQuery', msg => {
-    if (msg.data = 'fav') {
+    if (msg.data == 'fav') {
         User.findOne({
             where: {
                 telegramId: msg.from.id.toString()
@@ -308,8 +308,18 @@ bot.on('callbackQuery', msg => {
                     },
                 })
                     .then((items) => {
-                        console.log(items)
+                        console.log(items.dataValues.stationName)
+                        var departure = items.dataValues.stationName
                         console.log('it works!')
+                        var arrFav = [];
+                        items.forEach((val) => {
+                            arrFav.push('/from ' + val.dataValues);
+                        });
+                        var keys = []
+                        for (var i = 0; i < arrFav.length; i++) {
+                            keys.push(['/from ' + stations[i]])
+                        }
+                        return bot.sendMessage(msg.from.id, 'nice!', { replyMarkup });
                     })
             })
 
@@ -349,9 +359,8 @@ bot.on('callbackQuery', msg => {
                         allArr.forEach(function (val) {
                             allStations.push(val.dataValues.english)
                         })
-                        var stations = allStations
                         var keys = []
-                        for (var i = 0; i < stations.length; i++) {
+                        for (var i = 0; i < allStations.length; i++) {
                             if (toCheck) {
                                 keys.push(['/to ' + stations[i]])
                             } else {
