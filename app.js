@@ -129,7 +129,7 @@ app.post('/addFavoriteStation',function(req, res){
                     stationName:req.body.stationName
                 })
             }
-            res.redirect('/home/:language');
+            res.redirect('/home/english');
         })
 })
 

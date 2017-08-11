@@ -308,6 +308,7 @@ bot.on('callbackQuery', msg => {
                     },
                 })
                     .then((items) => {
+                        console.log(items.dataValues)
                         console.log(items.dataValues.stationName)
                         var departure = items.dataValues.stationName
                         console.log('it works!')
