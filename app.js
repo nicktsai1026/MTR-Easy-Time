@@ -43,10 +43,10 @@ app.get('/home/:language', function(req,res){
     selector.listStations()
         .then((lines) => {
             //console.log(req.user.dataValues.facebookId);
-            if (req.params.language == 'english'){
-                lines.inEnglish = true;
+            if (req.params.language == 'chinese'){
+                lines.inChinese = true;
             } else {
-                lines.inEnglish = false;
+                lines.inChinese = false;
             }
             var fbPersonalInfo = [];
             Redis.get(req.user.dataValues.facebookId,function(err,data){
@@ -68,10 +68,10 @@ app.get('/line/:id/:language', function(req,res){
     //console.log(req.params.id);
     selector.listStations()
         .then((lines) => {
-            if (req.params.language == 'english'){
-                lines.inEnglish = true;
+            if (req.params.language == 'chinese'){
+                lines.inChinese = true;
             } else {
-                lines.inEnglish = false;
+                lines.inChinese = false;
             }
             Line_station.findAll({
                 where:{
