@@ -36,6 +36,12 @@ In hope of providing an easy and convenient option for getting MTR information, 
 - Fee
 - Specific routes (where to change train)
 - Show closest exits according to landmarks
+2. Improve and add features
+- add train line map to chatbot (to show which train line a station is on for users who don't remember)
+3. Improve user interface
+
+# Remarks
+This is only the prototype of our idea and the app still has room for improvement. If you would like to help provide a better transportation information app for people in Hong Kong, we encourage you send us feedback, build on our code and let us know about it :)
 
 # Authors
 Corah Chiu (git:corahchiu), Nick Tsai (git:nicktsai1026), Morris Wong (git:morriswong)
