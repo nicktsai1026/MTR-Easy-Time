@@ -315,7 +315,7 @@ bot.on('callbackQuery', msg => {
                         console.log('it works!')
                         var arrFav = [];
                         items.forEach((val) => {
-                            arrFav.push(val.dataValues);
+                            arrFav.push(val.dataValues.stationName);
                         });
                         var keys = []
                         for (var i = 0; i < arrFav.length; i++) {
