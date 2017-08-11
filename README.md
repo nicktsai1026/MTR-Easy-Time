@@ -3,7 +3,7 @@
 Telegram: @Mtr_time_bot
 
 # Concept
-In hope of providing an easy and convenient option for getting MTR information, we have the idea of creating an extension within the messenger Telegram for providing such information. This is our prototype.
+In hope of providing an easy and convenient option for getting MTR information, we have the idea of creating an extension within the messenger app Telegram for providing such information. This is our prototype.
 
 # Current information and service provided in app
 1. Travel time between stations
