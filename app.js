@@ -43,10 +43,10 @@ app.get('/home/:language', function(req,res){
     selector.listStations()
         .then((lines) => {
             //console.log(req.user.dataValues.facebookId);
-            if (req.params.language == 'chinese'){
-                lines.inChinese = true;
+            if (req.params.language == 'english'){
+                lines.inEnglish = true;
             } else {
-                lines.inChinese = false;
+                lines.inEnglish = false;
             }
             var fbPersonalInfo = [];
             Redis.get(req.user.dataValues.facebookId,function(err,data){
@@ -68,10 +68,10 @@ app.get('/line/:id/:language', function(req,res){
     //console.log(req.params.id);
     selector.listStations()
         .then((lines) => {
-            if (req.params.language == 'chinese'){
-                lines.inChinese = true;
+            if (req.params.language == 'english'){
+                lines.inEnglish = true;
             } else {
-                lines.inChinese = false;
+                lines.inEnglish = false;
             }
             Line_station.findAll({
                 where:{
@@ -120,7 +120,7 @@ app.post('/addFavoriteStation',function(req, res){
     // console.log(req.body);
     Favor.findOne({where:{remark:req.body.remark}})
         .then((favor)=>{
-            console.log(favor);
+            //console.log(favor);
             if(!favor){
                 const favor = new Favor();
                 Favor.create({

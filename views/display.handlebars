@@ -10,7 +10,7 @@
     }
 </style>
 <div class="showFavor">
-    <a href="/showFavor"><button class="favorbtn" type="button" name="button">My favourite stations</button></a>
+    <a href="/showFavor"><button class="favorbtn" type="button" name="button">Check my favor</button></a>
 </div>
 
 <div class="languagebtn">
@@ -21,29 +21,29 @@
 
 <div class="container" style="height:auto">
     <!-- if the property inChinese exists -->
-    {{#if inChinese}}
-    <a href="#showAll"><h2>地鐵綫</h2></a>
-    {{#show}}
-    <a href="/line/{{id}}/chinese"><button id='line{{id}}' class="col-md-5 col-sm-5 col-xs-5 line" type="button" name="button">{{chinese}}</button></a>
-    {{/show}}
-    {{else}}
+    {{#if inEnglish}}
     <a href="#showAll"><h2>Lines</h2></a>
     {{#show}}
     <a href="/line/{{id}}/english"><button id='line{{id}}' class="col-md-5 col-sm-5 col-xs-5 line" type="button" name="button">{{english}}</button></a>
+    {{/show}}
+    {{else}}
+    <a href="#showAll"><h2>地鐵綫</h2></a>
+    {{#show}}
+    <a href="/line/{{id}}/chinese"><button id='line{{id}}' class="col-md-5 col-sm-5 col-xs-5 line" type="button" name="button">{{chinese}}</button></a>
     {{/show}}
     {{/if}}
 </div>
 
 <div class="container">
-    {{#if inChinese}}
-    <a href="#addFavor"><h2 id="showAll">地鐵站</h2></a>
-    {{#list}}
-        <a href="#addFavor"><button id="station-{{id}}" class="col-md-5 col-sm-5 col-xs-5 lineStation{{cssId}} station" type="button" name="button">{{chinese}}</button></a>
-    {{/list}}
-    {{else}}
+    {{#if inEnglish}}
     <a href="#addFavor"><h2 id="showAll">Stations</h2></a>
     {{#list}}
         <a href="#addFavor"><button id="station-{{id}}" class="col-md-5 col-sm-5 col-xs-5 lineStation{{cssId}} station" type="button" name="button">{{english}}</button></a>
+    {{/list}}
+    {{else}}
+    <a href="#addFavor"><h2 id="showAll">地鐵站</h2></a>
+    {{#list}}
+        <a href="#addFavor"><button id="station-{{id}}" class="col-md-5 col-sm-5 col-xs-5 lineStation{{cssId}} station" type="button" name="button">{{chinese}}</button></a>
     {{/list}}
     {{/if}}
 </div>
