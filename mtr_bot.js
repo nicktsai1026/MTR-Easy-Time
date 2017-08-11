@@ -321,7 +321,9 @@ bot.on('callbackQuery', msg => {
                         for (var i = 0; i < arrFav.length; i++) {
                             keys.push(['/from ' + arrFav[i]])
                         }
-                        return bot.sendMessage(msg.from.id, 'nice!', { replyMarkup });
+                        var replyMarkup = bot.keyboard(keys)
+                        bot.sendMessage(msg.from.id, 'Pick your stations below:', { replyMarkup });
+                        return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
                     })
             })
 
