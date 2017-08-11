@@ -8,6 +8,7 @@ const User = models.user;
 const Favor = models.favor;
 const mapsToken = 'AIzaSyBoFN8cy4YjlKB8EF6mccM6Re4DOzzMn04'
 const Redis = require('./redis');
+const GetTime = require('./getMapTime')
 
 const BUTTONS = {
     home: {
@@ -15,7 +16,7 @@ const BUTTONS = {
         command: '/start'
     },
     restart: {
-        label: '🔙 Start again',
+        label: '🔙 Start over',
         command: '/restart'
     },
     types: {
@@ -172,26 +173,6 @@ bot.on('ask.destination', msg => {
     });
 });
 
-bot.on('/map', msg => {
-    Redis.get('to', function (err, data) {
-        if (err) return console.log(err);
-        console.log("Getting the map of " + data)
-        var data = data.toLowerCase()
-        Station.findOne({ where: { lowerCaseName: data } })
-            .then((response) => {
-                var stationAbr = response.dataValues.mtrShort.toLowerCase()
-                var links = 'http://www.mtr.com.hk/archive/ch/services/maps/' + stationAbr + '.pdf'
-                let replyMarkup = bot.inlineKeyboard([[bot.inlineButton('maps here!', { url: links })]])
-                return bot.sendMessage(msg.from.id, 'Check out the destinations map! ', { replyMarkup });
-            })
-            .catch((err) => {
-                console.log(err)
-                return bot.sendMessage(msg.from.id, 'Sorry! Something has gone wrong! Come back again later!');
-            })
-    })
-})
-
-// Inline buttons
 bot.on('/showStations', msg => {
     var allLines = {}
     var buttons = [];
@@ -291,6 +272,25 @@ bot.on(/^\/to (.+)$/, (msg, props) => {
     });
 });
 
+bot.on('/map', msg => {
+    Redis.get('to', function (err, data) {
+        if (err) return console.log(err);
+        console.log("Getting the map of " + data)
+        var data = data.toLowerCase()
+        Station.findOne({ where: { lowerCaseName: data } })
+            .then((response) => {
+                var stationAbr = response.dataValues.mtrShort.toLowerCase()
+                var links = 'http://www.mtr.com.hk/archive/ch/services/maps/' + stationAbr + '.pdf'
+                let replyMarkup = bot.inlineKeyboard([[bot.inlineButton('map here!', { url: links })]])
+                return bot.sendMessage(msg.from.id, 'Check out the destination\'s map! ', { replyMarkup });
+            })
+            .catch((err) => {
+                console.log(err)
+                return bot.sendMessage(msg.from.id, 'Sorry! Something has gone wrong! Come back again later!');
+            })
+    })
+})
+
 // Inline button callback
 bot.on('callbackQuery', msg => {
     if (msg.data == 'fav') {
@@ -308,10 +308,6 @@ bot.on('callbackQuery', msg => {
                     },
                 })
                     .then((items) => {
-                        // console.log(items)
-                        // console.log(items.dataValues)
-                        // console.log(items.dataValues.stationName)
-                        // var departure = items.dataValues.stationName
                         console.log('it works!')
                         var arrFav = [];
                         items.forEach((val) => {
@@ -373,7 +369,7 @@ bot.on('callbackQuery', msg => {
                             }
                         }
                         var replyMarkup = bot.keyboard(keys)
-                        bot.sendMessage(msg.from.id, 'nice!', { replyMarkup });
+                        bot.sendMessage(msg.from.id, 'Nice!', { replyMarkup });
                         return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
                     })
                     .catch((err) => {

@@ -15,6 +15,7 @@ const setupPassport = require('./passport');
 const router = require('./router')(express);
 const Redis = require('./redis');
 //const port = process.env.PORT || 8080;
+const testENV = process.env.ABC || 321;
 
 app.use(session({
     secret: 'supersecret',
