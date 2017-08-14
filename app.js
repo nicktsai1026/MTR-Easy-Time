@@ -15,6 +15,7 @@ const setupPassport = require('./passport');
 const router = require('./router')(express);
 const Redis = require('./redis');
 //const port = process.env.PORT || 8080;
+const testENV = process.env.ABC || 321;
 
 app.use(session({
     secret: 'supersecret',
@@ -129,7 +130,7 @@ app.post('/addFavoriteStation',function(req, res){
                     stationName:req.body.stationName
                 })
             }
-            res.redirect('/home/:language');
+            res.redirect('/home/english');
         })
 })
 
