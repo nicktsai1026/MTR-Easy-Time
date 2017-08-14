@@ -8,7 +8,6 @@ const User = models.user;
 const Favor = models.favor;
 const mapsToken = 'AIzaSyBoFN8cy4YjlKB8EF6mccM6Re4DOzzMn04'
 const Redis = require('./redis');
-// const GetTime = require('./getMapTime')
 
 const BUTTONS = {
     home: {
