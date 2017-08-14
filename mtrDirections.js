@@ -11,7 +11,7 @@ var mapsDirectionsToken = 'AIzaSyBoFN8cy4YjlKB8EF6mccM6Re4DOzzMn04'
 var origin = 'Wan Chai Station'
 var destination = 'Wong Tai Sin Station'
 
-// axios.get('https://maps.googleapis.com/maps/api/directions/json?origin=' + origin + 
+// axios.get('https://maps.googleapis.com/maps/api/directions/json?origin=' + origin +
 // '&destination=' + destination + '&mode=transit&key=AIzaSyBoFN8cy4YjlKB8EF6mccM6Re4DOzzMn04')
 //     .then((response) => {
 //         console.log(response.data.routes[0].legs[0].duration.text)
