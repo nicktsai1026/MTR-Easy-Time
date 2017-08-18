@@ -15,6 +15,7 @@ const setupPassport = require('./passport');
 const router = require('./router')(express);
 const Redis = require('./redis');
 //const port = process.env.PORT || 8080;
+const testENV = process.env.ABC || 321;
 
 app.use(session({
     secret: 'supersecret',
@@ -120,7 +121,7 @@ app.post('/addFavoriteStation',function(req, res){
     // console.log(req.body);
     Favor.findOne({where:{remark:req.body.remark}})
         .then((favor)=>{
-            console.log(favor);
+            //console.log(favor);
             if(!favor){
                 const favor = new Favor();
                 Favor.create({

@@ -15,7 +15,7 @@ const BUTTONS = {
         command: '/start'
     },
     restart: {
-        label: '🔙 Start again',
+        label: '🔙 Start over',
         command: '/restart'
     },
     types: {
@@ -48,10 +48,10 @@ const bot = new TeleBot({
 
 // On commands
 bot.on(['/start'], msg => {
-    User.findOne({where:{telegramId:msg.chat.id.toString()}})
-        .then((user)=>{
-            if(!user){
-                User.create({telegramId:msg.chat.id});
+    User.findOne({ where: { telegramId: msg.chat.id.toString() } })
+        .then((user) => {
+            if (!user) {
+                User.create({ telegramId: msg.chat.id });
             }
         })
     let replyMarkup = bot.keyboard([
@@ -172,26 +172,6 @@ bot.on('ask.destination', msg => {
     });
 });
 
-bot.on('/map', msg => {
-    Redis.get('to', function (err, data) {
-        if (err) return console.log(err);
-        console.log("Getting the map of " + data)
-        var data = data.toLowerCase()
-        Station.findOne({ where: { lowerCaseName: data } })
-            .then((response) => {
-                var stationAbr = response.dataValues.mtrShort.toLowerCase()
-                var links = 'http://www.mtr.com.hk/archive/ch/services/maps/' + stationAbr + '.pdf'
-                let replyMarkup = bot.inlineKeyboard([[bot.inlineButton('maps here!', { url: links })]])
-                return bot.sendMessage(msg.from.id, 'Check out the destinations map! ', { replyMarkup });
-            })
-            .catch((err) => {
-                console.log(err)
-                return bot.sendMessage(msg.from.id, 'Sorry! Something has gone wrong! Come back again later!');
-            })
-    })
-})
-
-// Inline buttons
 bot.on('/showStations', msg => {
     var allLines = {}
     var buttons = [];
@@ -291,9 +271,28 @@ bot.on(/^\/to (.+)$/, (msg, props) => {
     });
 });
 
+bot.on('/map', msg => {
+    Redis.get('to', function (err, data) {
+        if (err) return console.log(err);
+        console.log("Getting the map of " + data)
+        var data = data.toLowerCase()
+        Station.findOne({ where: { lowerCaseName: data } })
+            .then((response) => {
+                var stationAbr = response.dataValues.mtrShort.toLowerCase()
+                var links = 'http://www.mtr.com.hk/archive/ch/services/maps/' + stationAbr + '.pdf'
+                let replyMarkup = bot.inlineKeyboard([[bot.inlineButton('map here!', { url: links })]])
+                return bot.sendMessage(msg.from.id, 'Check out the destination\'s map! ', { replyMarkup });
+            })
+            .catch((err) => {
+                console.log(err)
+                return bot.sendMessage(msg.from.id, 'Sorry! Something has gone wrong! Come back again later!');
+            })
+    })
+})
+
 // Inline button callback
 bot.on('callbackQuery', msg => {
-    if (msg.data = 'fav') {
+    if (msg.data == 'fav') {
         User.findOne({
             where: {
                 telegramId: msg.from.id.toString()
@@ -308,8 +307,18 @@ bot.on('callbackQuery', msg => {
                     },
                 })
                     .then((items) => {
-                        console.log(items)
                         console.log('it works!')
+                        var arrFav = [];
+                        items.forEach((val) => {
+                            arrFav.push(val.dataValues.stationName);
+                        });
+                        var keys = []
+                        for (var i = 0; i < arrFav.length; i++) {
+                            keys.push(['/from ' + arrFav[i]])
+                        }
+                        var replyMarkup = bot.keyboard(keys)
+                        bot.sendMessage(msg.from.id, 'Pick your stations below:', { replyMarkup });
+                        return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
                     })
             })
 
@@ -349,17 +358,17 @@ bot.on('callbackQuery', msg => {
                         allArr.forEach(function (val) {
                             allStations.push(val.dataValues.english)
                         })
-                        var stations = allStations
+                        // console.log(allStations)
                         var keys = []
-                        for (var i = 0; i < stations.length; i++) {
+                        for (var i = 0; i < allStations.length; i++) {
                             if (toCheck) {
-                                keys.push(['/to ' + stations[i]])
+                                keys.push(['/to ' + allStations[i]])
                             } else {
-                                keys.push(['/from ' + stations[i]])
+                                keys.push(['/from ' + allStations[i]])
                             }
                         }
                         var replyMarkup = bot.keyboard(keys)
-                        bot.sendMessage(msg.from.id, 'nice!', { replyMarkup });
+                        bot.sendMessage(msg.from.id, 'Nice!', { replyMarkup });
                         return bot.answerCallbackQuery(msg.id, `Inline button callback: ${msg.data}`, true)
                     })
                     .catch((err) => {

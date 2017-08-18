@@ -233,7 +233,7 @@ module.exports = (express) => {
         });
 
     router.get('/home', function (req, res) {
-        res.redirect('/home/chinese');
+        res.redirect('/home/english');
     })
 
     return router;
