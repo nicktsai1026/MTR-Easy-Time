@@ -123,53 +123,69 @@ bot.on('ask.handleEmoji', msg => {
 });
 
 bot.on('ask.departure', msg => {
-    const departure = msg.text;
-    // Station.findOne({ where: { id: val.dataValues.stationId } })
-    console.log(departure)
-    Redis.set('from', departure, function (err, data) {
-        if (err) return console.log(err);
-    })
-    return bot.sendMessage(msg.from.id, `Okay, ${departure} it is. Then where are you going?`, { ask: 'destination' });
+    let departure = msg.text.toLowerCase();
+    Station.findOne({ where: { lowerCaseName: departure } })
+        .then((station)=>{
+            if(!station) {
+                return bot.sendMessage(msg.from.id,`Opps! It's not a station. Please try again.`,{ ask: 'departure' });
+            }
+            Redis.set('from', departure, function (err, data) {
+                if (err) return console.log(err);
+            })
+            return bot.sendMessage(msg.from.id, `Okay, ${departure} it is. Then where are you going?`, { ask: 'destination' });
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
 });
 
 bot.on('ask.destination', msg => {
-    var fromStation = ''
-    var toStation = ''
-    const destination = msg.text;
+    var fromStation = '';
+    var toStation = '';
 
-    Redis.set('to', destination, function (err, data) {
-        if (err) return console.log(err);
-        console.log(data)
-    })
-    bot.sendMessage(msg.from.id, `You are going to ${destination}. Alright!`);
+    let destination = msg.text.toLowerCase();
+    Station.findOne({ where: { lowerCaseName : destination }})
+        .then((station)=>{
+            if(!station) {
+                return bot.sendMessage(msg.from.id,`Opps! It's not a station. Please try again.`,{ ask: 'destination' });
+            }
+            Redis.set('to', destination, function (err, data) {
+                if (err) return console.log(err);
+            })
+            bot.sendMessage(msg.from.id, `You are going to ${destination}.`)
+            .then(() => {
+                bot.sendMessage(msg.from.id, `Hold on! Looking it up...`)
+                Redis.get('from', function (err, data) {
+                    if (err) return console.log(err);
+                    console.log("The depart station is " + data)
+                    fromStation = data + ' Station, Hong Kong'
 
-    Redis.get('from', function (err, data) {
-        if (err) return console.log(err);
-        console.log("The depart station is " + data)
-        fromStation = data + ' Station, Hong Kong'
+                    Redis.get('to', function (err, data) {
+                        if (err) return console.log(err);
+                        console.log("The destination station is " + data)
+                        toStation = data + ' Station, Hong Kong'
 
-        Redis.get('to', function (err, data) {
-            if (err) return console.log(err);
-            console.log("The destination station is " + data)
-            toStation = data + ' Station, Hong Kong'
-
-            axios.get('https://maps.googleapis.com/maps/api/directions/json?origin=' +
-                fromStation + '&destination=' + toStation + '&mode=transit&key=' + mapsToken)
-                .then((response) => {
-                    console.log(response.data.routes[0].legs[0].duration.text)
-                    var time = response.data.routes[0].legs[0].duration.text
-                    let replyMarkup = bot.keyboard([
-                        [BUTTONS.map.label], [BUTTONS.restart.label]
-                    ], { resize: true })
-                    bot.sendMessage(msg.from.id, 'There you go!', { replyMarkup });
-                    return bot.sendMessage(msg.from.id, 'From ' + fromStation +
-                        ' to ' + toStation + '\nEstimated time: ' + time);
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+                        axios.get('https://maps.googleapis.com/maps/api/directions/json?origin=' +
+                        fromStation + '&destination=' + toStation + '&mode=transit&key=' + mapsToken)
+                        .then((response) => {
+                            console.log(response.data.routes[0].legs[0].duration.text)
+                            var time = response.data.routes[0].legs[0].duration.text
+                            let replyMarkup = bot.keyboard([
+                                [BUTTONS.map.label], [BUTTONS.restart.label]
+                            ], { resize: true })
+                            bot.sendMessage(msg.from.id, 'There you go!', { replyMarkup });
+                            return bot.sendMessage(msg.from.id, 'From ' + fromStation +
+                            ' to ' + toStation + '\nEstimated time: ' + time);
+                        })
+                        .catch((err) => {console.log(err)})
+                    })
+                });
+            })
         })
-    });
+        .catch((err)=>{
+            console.log(err);
+        })
+
 });
 
 bot.on('/showStations', msg => {
