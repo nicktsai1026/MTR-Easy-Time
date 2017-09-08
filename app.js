@@ -54,7 +54,6 @@ app.get('/home/:language', function(req,res){
                 if(err){
                     return console.log(err);
                 }
-                // console.log(data);
                 fbPersonalInfo.push(JSON.parse(data));
             });
             lines.fbInfo = fbPersonalInfo;
